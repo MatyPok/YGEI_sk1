@@ -1,7 +1,7 @@
 clc; clear; format long g
 
 % nacteni rastru
-ras1 = imread('image2.bmp'); % nacte se jako RGB
+ras1 = imread('image_papousek.jpg'); % nacte se jako RGB
 % ras1 = imread('geodetka.jpeg');
 % imshow(ras1);
 
@@ -27,14 +27,16 @@ CR_ = 2*CR - 255;
 %% komprese dwt
  % aplikace me funkce diskretni vlnkove transformace
 [Y_LLt, Y_LHt, Y_HLt, Y_HHt] = DWT(Y);
+Y_LLt_n = mat2gray(Y_LLt); % Převede matici LL do rozsahu 0-1
+Y_LHt_n = mat2gray(Y_LHt); % Převede matici LL do rozsahu 0-1
+Y_HLt_n = mat2gray(Y_HLt); % Převede matici LL do rozsahu 0-1
+Y_HHt_n = mat2gray(Y_HHt); % Převede matici LL do rozsahu 0-1
 [CBs_LLt, CBs_LHt, CBs_HLt, CBs_HHt] = DWT(CB);
 [CRs_LLt, CRs_LHt, CRs_HLt, CRs_HHt] = DWT(CR);
-% Y_LLt = mat2gray(Y_LLt);
-% CBs_LLt = mat2gray(CBs_LLt);
-% CRs_LLt = mat2gray(CRs_LLt);
+
 
 %% kvantizace
-% kvantizaci delat nebudu, protoze kvantizacni matice jsou pro submatice
+% kvantizace je v teto kompresi vynechána, protože obraz nebyl dělen na submatice
 
 %% dekomprese
   Y_idwt = iDWT(Y_LLt, Y_LHt, Y_HLt, Y_HHt);
@@ -47,25 +49,15 @@ Rd = Y_idwt + 1.4020 * (CRs_idwt - 128);
 Gd = Y_idwt - 0.344136 * (CBs_idwt - 128) - 0.714136 * (CRs_idwt - 128);
 Bd = Y_idwt + 1.7720 * (CBs_idwt - 128);
 
-% OREZ NA PUVODNI VELIKOST
-% Rd = Rd(1:size(R,1), 1:size(R,2));
-% Gd = Gd(1:size(G,1), 1:size(G,2));
-% Bd = Bd(1:size(B,1), 1:size(B,2));
+
 % Sestavte obraz zpět
 ras_dekompress(:,:,1) = uint8(Rd);
 ras_dekompress(:,:,2) = uint8(Gd);
 ras_dekompress(:,:,3) = uint8(Bd);
-imshow(ras_dekompress);
 
+imshow(ras_dekompress)
+% imwrite(ras_dekompress,'image_papousek_DWT.jpg')
 
-Ri = uint8(Rd);
-Gi = uint8(Gd);
-Bi = uint8(Bd);
-
-ras_dekompress(:,:,1) = Ri;
-ras_dekompress(:,:,2) = Gi;
-ras_dekompress(:,:,3) = Bi;
-% imshow(ras_dekompress)
 
 %% ZHODNOCENI JPG komprese pomoci metriky
 % vypocet strednich chyb
@@ -77,6 +69,6 @@ dR2 = dR.^2;
 dG2 = dG.^2; 
 dB2 = dB.^2; 
 
-sigR  = sqrt(sum(sum(dR))/(m*n));
-sigG = sqrt(sum(sum(dG))/(m*n));
-sigB = sqrt(sum(sum(dB))/(m*n));
+sigR  = sqrt(sum(sum(dR2))/(m*n));
+sigG = sqrt(sum(sum(dG2))/(m*n));
+sigB = sqrt(sum(sum(dB2))/(m*n));
