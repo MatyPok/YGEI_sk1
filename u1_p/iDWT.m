@@ -1,6 +1,6 @@
 function [A] = iDWT(LL, LH, HL, HH)
     % Inverzni diskrétní vlnková transformace (IDWT) pro Haarovu vlnku
-    % Vstup: LL, LH, HL, HH - dekomponované submatice
+    % Vstup: LL, LH, HL, HH 
     % Výstup: A - rekonstruovaná matice
 
     %% zpetne rozsireni matice na puvodni velikost, nejpre radky
