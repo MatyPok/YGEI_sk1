@@ -1,8 +1,7 @@
-function [Y_encoded, V, C]=huffman(Y)
+function [Y_encoded, code_table]=huffman(Y)
 % Y_decoded = vektor (double) s vektorem Y přepsaným pomocí Huffmanova
 % kódování
-% V = seřazený vektor hodnot nacházejících se ve vektoru Y
-% C = vektor svým pořadím odpovídající V s kódy pro hodnoty z Y
+% code_table = seřazený vektor hodnot nacházejících se ve vektoru Y a vektor svým pořadím odpovídající V s kódy pro hodnoty z Y
 
 %% Huffmannovo kódování
 
@@ -53,6 +52,7 @@ while length(probs) > 1
 
     % Aktualizace hodnot a kódů
     codes = codes(idx);
+    codes;
 end
 
 for i = 1:length(Y)
@@ -63,9 +63,10 @@ for i = 1:length(Y)
     end
 end
 
-Y_encoded = str2double(Y_encoded);
+%Y_encoded = str2double(Y_encoded);
 V = cell2mat(values);
-C = str2double(codes{1});
+%C = str2double(codes{1});
+code_table = [V;codes{1}];
 
 
 end

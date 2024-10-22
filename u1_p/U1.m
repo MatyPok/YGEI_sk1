@@ -1,4 +1,9 @@
-function [Ras_decomp,smdch]=JPEG_function(Raster,compression_factor)
+clc; clear; format long g;
+
+
+Raster = 'Image2.bmp';
+q = 25;
+
 %clc; clear; format long g;
 %%
 % load images as matrices (load does not work, imread() needed)
@@ -6,12 +11,12 @@ function [Ras_decomp,smdch]=JPEG_function(Raster,compression_factor)
 pic2 = imread(Raster);
 
 %%
-% Compression factor
-if nargin==2
-    q = compression_factor;
-else
-    q = 25;
-end
+% % Compression factor
+% if nargin==2
+%     q = compression_factor;
+% else
+%     q = 25;
+% end
 
 %%
 % divide pistures into RGB parts
@@ -62,7 +67,7 @@ Qc = 50*Qc/q;
 % Process input raster by sub-matrices
 
 [m,n] = size(R);
-
+ZIGZAG = [];
 for i = 1:8:m-7
     for j = 1:8:n-7
 
@@ -92,21 +97,52 @@ for i = 1:8:m-7
 
         % Overwriting tiles with compresseds ones
 
-        Y_t(i:i+7,j:j+7) = Y_Qr; CB_t(i:i+7,j:j+7) = CB_Qr; CR_t(i:i+7,j:j+7) = CR_Qr;
+        %Y_t(i:i+7,j:j+7) = Y_Qr; CB_t(i:i+7,j:j+7) = CB_Qr; CR_t(i:i+7,j:j+7) = CR_Qr;
+
+        % Encoding tiles into zigzag sequences
+        Y_zz = zig_zag(Y_Qr); CB_zz = zig_zag(CB_Qr); CR_zz = zig_zag(CR_Qr);
+
+        % % encoding sequences into Huffmann codes
+        % [Y_H, Y_VC] = huffman(Y_zz);
+        % [CB_H, CB_VC] = huffman(CB_zz);
+        % [CR_H, CR_VC] = huffman(CR_zz);
         
+        ZIGZAG = [ZIGZAG,[Y_zz;CB_zz;CR_zz]];
+        
+
     end
 end
 
+huff_table = {};
+% Apply huffman encoding
+for i = 1:3
+    [Y_CB_CR_huffenc(i,:),huff_table{end+1}]=huffman(ZIGZAG(i,:));
+end
+
+% Apply huffman decoding
+for i = 1:3
+    ZIGZAG2decode(i,:)=huffman_decode(Y_CB_CR_huffenc(i,:),huff_table{i});
+end
+
+
+
+
+k = 0;
 %%
 % JPEG decompression
 for i = 1:8:m-7
     for j = 1:8:n-7
 
-        % Create sub-matrices
-        Ys = Y_t(i:i+7,j:j+7);
-        CBs = CB_t(i:i+7,j:j+7);
-        CRs = CR_t(i:i+7,j:j+7);
 
+        % % Create sub-matrices
+        % Ys = Y_t(i:i+7,j:j+7);
+        % CBs = CB_t(i:i+7,j:j+7);
+        % CRs = CR_t(i:i+7,j:j+7);
+
+        Ys = inv_zig_zag(ZIGZAG2decode(1,64*k+1:64*(k+1)),8,8);
+        CBs = inv_zig_zag(ZIGZAG2decode(2,64*k+1:64*(k+1)),8,8);
+        CRs = inv_zig_zag(ZIGZAG2decode(3,64*k+1:64*(k+1)),8,8);
+        k = k + 1;
 
         % Apply IDCT and DeQuantisate
         Y_idct = my_idct(Ys.*Qc);
@@ -147,6 +183,7 @@ sigB = sqrt(sum(sum(dB.^2))/(m*n));
 
 smdch = [sigR;sigG;sigB];
 
+
 %%
 % define DCT function
 
@@ -186,6 +223,7 @@ function Rt = my_dct(R)
     end
 
 end
+
 
 
 %%
@@ -230,9 +268,3 @@ function Rt = my_idct(R)
 end
 
 
-
-%%
-%
-
-
-end
