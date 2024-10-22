@@ -53,7 +53,7 @@ Gd = Y_idwt - 0.344136 * (CBs_idwt - 128) - 0.714136 * (CRs_idwt - 128);
 Bd = Y_idwt + 1.7720 * (CBs_idwt - 128);
 
 
-% Sestavte obraz zpět
+% Sestavení zpět
 ras_dekompress(:,:,1) = uint8(Rd);
 ras_dekompress(:,:,2) = uint8(Gd);
 ras_dekompress(:,:,3) = uint8(Bd);
