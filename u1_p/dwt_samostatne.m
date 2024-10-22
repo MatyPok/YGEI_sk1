@@ -1,4 +1,7 @@
 clc; clear; format long g
+%% 
+% Tento skript slouží pro kompresi pomocí DWT. Ve skriptu jsou volány dvě funkce: DWT a iDWT.
+%%
 
 % nacteni rastru
 ras1 = imread('image_papousek.jpg'); % nacte se jako RGB
