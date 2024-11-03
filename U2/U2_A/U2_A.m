@@ -1,20 +1,22 @@
 %%
 clc; clear; format compact; close all
 
-% NACTETE OBRAZ
+% NACTETE MAPU
 im = imread('MMC08_sk1.jpg');
 
 % ZADEJTE KORELACNI KOEFICIENT
 korelace = 0.7;
 
 % ZADEJTE POCET VZORKU
+% nazev souboru se vzorky musi mit podobu: vzor1.jpg, vzor2,jpg, ...
+% pokud je vzorku vice nez 5 - zmente cislo ↓
 pocet_vzorku = 5;
 
-%
-% prumerovani vzorku
-avg_vzor = prumer_vzorku(pocet_vzorku); % je potreba mit vzorky uz vybrane a ulozene pod konkretnim nazvem - viz. funkce.
+%% PRUMEROVANI VZORKU
+avg_vzor = prumer_vzorku(pocet_vzorku); % je potreba mit vzorky uz vybrane
 
 %% PREDZPRACOVANI OBRAZU
+% RGB → YCbCr a redukce sumu
 im_YCBCR = rgb2ycbcr(im);
 im_YCBCR = im_YCBCR(:,:,1);
 im_YCBCR = imgaussfilt(im_YCBCR, 2);
@@ -23,13 +25,6 @@ vzorekYCBCR = rgb2ycbcr(avg_vzor);
 vzorekYCBCR = vzorekYCBCR(:,:,1);
 vzorekYCBCR = imgaussfilt(vzorekYCBCR, 2);
 vzorek_post = vzorekYCBCR;
-
-%% 
-[vyska_vzorek, sirka_vzorek] = size(avg_vzor,1:2);
-subplot(2,2,2)
-imshow(avg_vzor)
-axis on
-title('Vzorek pro vyhledávání')
 
 %% korelace
 corelation_channel_output = 1;
@@ -43,13 +38,12 @@ korelace_vystup = normxcorr2(vzorek_post, im_post); % vystupni matice ma vetsi
 [r,s] = find(abs(korelace_vystup) >= korelace);
 nalezeno = [r,s];
 
-%%
+%% proredeni vicenasobneho opakovani
 % mam vicenasobne opakovani, ktere chci profiltrovat a nechat jen jedinecnou polohu 
-nalezeno = sortrows(nalezeno,1); 
 nalezeno = jedinecna_poloha(nalezeno,sirka_vzorek);
 pocet = size(nalezeno,1);
 
-%% 
+%% VYKRESLENI VYSLEDKU
 % vytvoreni grafickeho okna a zobrazeni puvodniho obrazu.
 figure(1)
 subplot(2,2,1);
@@ -89,3 +83,8 @@ title('Identifikované vzory v mapě',['počet nalezených vzorů = ', num2str(p
 
 %% pixelove souradnice obci s kostelem
 pixel_sourad = [nalezeno(:,2)-sirka_vzorek, nalezeno(:,1)-vyska_vzorek, nalezeno(:,2)+sirka_vzorek, nalezeno(:,1)+vyska_vzorek];
+fid = fopen('ObceSKostelem_PixeloveSouradnice.txt','w');
+fprintf(fid,'Pixelové souřadnice obcí s kostelem. \n Souřadnice přestravují obdelník, který je viditelný v mapě.\n');
+fprintf(fid,'%5d %5d %5d %5d\n', pixel_sourad');
+
+fclose(fid);
