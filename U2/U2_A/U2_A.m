@@ -70,7 +70,7 @@ subplot(2,2,4)
 hold on
 imshow(im, [])
 for i = 1:size(nalezeno,1)
-    rectangle('Position', [nalezeno(i,2)-sirka_vzorek, nalezeno(i,1)-vyska_vzorek, sirka_vzorek, vyska_vzorek],'EdgeColor','g', 'LineWidth',1)
+    rectangle('Position', [nalezeno(i,2)-sirka_vzorek, nalezeno(i,1)-vyska_vzorek, sirka_vzorek, vyska_vzorek],'EdgeColor','m', 'LineWidth',1)
 end
 axis on
 title('Identifikované vzory v mapě',['počet nalezených vzorů = ', num2str(pocet)])
@@ -80,7 +80,7 @@ figure(2)
 hold on
 imshow(im, [])
 for i = 1:size(nalezeno,1)
-    rectangle('Position', [nalezeno(i,2)-sirka_vzorek, nalezeno(i,1)-vyska_vzorek, sirka_vzorek, vyska_vzorek],'EdgeColor','g', 'LineWidth',1)
+    rectangle('Position', [nalezeno(i,2)-sirka_vzorek, nalezeno(i,1)-vyska_vzorek, sirka_vzorek, vyska_vzorek],'EdgeColor','m', 'LineWidth',1)
 end
 axis on
 title('Identifikované vzory v mapě',['počet nalezených vzorů = ', num2str(pocet)])
