@@ -7,9 +7,11 @@ function Y=zig_zag(X)
     Y(end+1)=X(1,1);
     j = 1; i = 1;
     change_dir = 0;
-
+    
+    % cycle is running until we reach the end of matrix
     while length(Y) < m*n
 
+        % there we change index according to direction in which we are moving
         if change_dir == 0
             j = j + 1;
         elseif change_dir >= 1
@@ -23,6 +25,7 @@ function Y=zig_zag(X)
             break
         end 
 
+        % the change in direction occurs when we at the side of matrix
         if j == n
             change_dir = change_dir + 1;
         end
@@ -32,7 +35,7 @@ function Y=zig_zag(X)
         sub_array = X(i:j,i:j);
         % fliping it right to left
         sub_array = fliplr(sub_array);
-
+        % adding the subdiagonal to the sequnce
         Y(end+1:end+length(sub_array)) = diag(sub_array);
 
         if change_dir <= 1
@@ -44,7 +47,6 @@ function Y=zig_zag(X)
         end
 
         % changing direction
-
         if change_dir == 0
             i = i + 1;
         elseif change_dir >= 1
@@ -58,7 +60,7 @@ function Y=zig_zag(X)
             break
         end 
 
-
+        % the change in direction occurs when we at the side of matrix
         if i == m
             change_dir = change_dir + 1;
         end
@@ -68,7 +70,7 @@ function Y=zig_zag(X)
         sub_array = X(j:i,j:i);
         % fliping it tight to left
         sub_array = flipud(sub_array);
-           
+        % adding the subdiagonal to the sequnce
         Y(end+1:end+length(sub_array)) = diag(sub_array);
 
         if change_dir <= 1
