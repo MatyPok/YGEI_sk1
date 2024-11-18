@@ -9,10 +9,10 @@ codes = mat2cell(C,1);
 Y_encoded = string(Y_encoded);
 
 
-
+% prohledávání zadaného vektoru a tabulky s klíči pro dekódování
 for i = 1:length(Y_encoded)
     for j = 1:length(codes{1})
-        if Y_encoded(i)==codes{1}(j)
+        if Y_encoded(i)==codes{1}(j) % pokud v klíči nalezneme kód shodující se se zadaným, přidělíme mu hodnotu z klíče
             Y(i) = values{1}(j);
         end
     end
@@ -22,6 +22,7 @@ end
 
 %C = str2double(codes{1});
 
+% návrat dekódovaného vektoru
 Y = str2double(Y);
 
 
