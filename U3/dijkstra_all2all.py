@@ -13,8 +13,8 @@ def rPath(u,v,P):
         path.append(v)
         v = P[v]
     path.append(v)
-    if v != u:
-        print('Incorrect path')
+    #if v != u:
+        #print('Incorrect path')
     return path
 
 # compute the total cost of path from the weights of edges of the path
@@ -25,7 +25,7 @@ def sum_of_weights(path, G):
     return w
 
 
-def dijkstra(G, start):
+def dijkstra(G, start, end):
     
     n = len(G)+1 # lenght of graph
     d = [inf]*n # all nodes to infinity
@@ -45,7 +45,8 @@ def dijkstra(G, start):
                 P[v] = u # the path is not through v, but u instead
                 PQ.put((d[v], v)) # putting v into the queue
     
-    return P, d[v]
+    path = rPath(start,end,P)
+    return path, d[v]
 
 
 
@@ -78,41 +79,15 @@ from matplotlib import pyplot as plt
 # and the .gpkg file for conversion, the default file silnice.gpkg
 G, C = lines2graph_gpkg(type_of_weight='Euclidean distance')
 
-from obce_load import obcefromgpkg, obec2node_of_graph
-O = obcefromgpkg()
-OC = obec2node_of_graph(O,C)
+# call the dijkstra algorithm for every pair of nodes
+all_paths = []
+for start, neigbors in G.items():
+    for end, neigbors in G.items():
+        if start != end:
+            path, D = dijkstra(G, start, end)
+            all_paths.append([path,D])
 
-# 5 Stříbrské nádraží (rozc.)
-# 83 sjezd 107 na D5
-# 267 Stará voda, 270 Okrouhlá
-# 268 sjezd 162 na D6
+print(all_paths)
 
-# call the dijkstra algorithm for a starting point
-P, D = dijkstra(G, 83)
-#print(P)
 
-# Create path from the list of predecessors (from the dijkstra al.) with the same starting point and given end point
-path = rPath(83, 268, P)
 
-# compute the cost of path
-cost = sum_of_weights(path, G)
-print(path, cost/1000)
-#print(G)
-
-# graphically display the network and the computed path (greed)
-for node, neighbors in G.items():
-        x, y = C[node]
-        for neighbor in neighbors:
-            nx, ny = C[neighbor]
-            plt.plot([x, nx], [y, ny], 'b-')
-        if node in path:
-            plt.plot(x, y, 'go')
-        else:
-            plt.plot(x, y, 'ro')
-        #plt.text(x, y, str(node), fontsize=8, ha='right', va='bottom', color='black')
-        try:
-            name = OC[node]
-            plt.text(x, y, str(name), fontsize=8, ha='right', va='bottom', color='black')
-        except:
-            continue
-plt.show()

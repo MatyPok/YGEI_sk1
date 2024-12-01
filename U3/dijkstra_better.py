@@ -25,8 +25,11 @@ def sum_of_weights(path, G):
     return w
 
 
-def dijkstra(G, start):
+def dijkstra(G, CO, town_start, town_end):
     
+    start = CO[town_start]
+    end = CO[town_end]
+
     n = len(G)+1 # lenght of graph
     d = [inf]*n # all nodes to infinity
     P = [-1]*n # predecessors to -1
@@ -45,7 +48,9 @@ def dijkstra(G, start):
                 P[v] = u # the path is not through v, but u instead
                 PQ.put((d[v], v)) # putting v into the queue
     
-    return P, d[v]
+    path = rPath(start, end, P)
+
+    return path, d[v]
 
 
 
@@ -76,11 +81,12 @@ from matplotlib import pyplot as plt
 
 # Call the gpkg2graph function, as an argument select one of 3 options of cost metric,
 # and the .gpkg file for conversion, the default file silnice.gpkg
-G, C = lines2graph_gpkg(type_of_weight='Euclidean distance')
+G, C = lines2graph_gpkg(type_of_weight='Transport time with deviality')
 
-from obce_load import obcefromgpkg, obec2node_of_graph
+from obce_load import obcefromgpkg, obec2node_of_graph, node2obec_of_graph
 O = obcefromgpkg()
 OC = obec2node_of_graph(O,C)
+CO = node2obec_of_graph(O,C)
 
 # 5 Stříbrské nádraží (rozc.)
 # 83 sjezd 107 na D5
@@ -88,28 +94,31 @@ OC = obec2node_of_graph(O,C)
 # 268 sjezd 162 na D6
 
 # call the dijkstra algorithm for a starting point
-P, D = dijkstra(G, 83)
+path, D = dijkstra(G, CO, 'Stříbro', 'Cheb')
 #print(P)
 
 # Create path from the list of predecessors (from the dijkstra al.) with the same starting point and given end point
-path = rPath(83, 268, P)
+#path = rPath(83, 268, P)
 
 # compute the cost of path
 cost = sum_of_weights(path, G)
-print(path, cost/1000)
+print(path, cost/60)
 #print(G)
 
 # graphically display the network and the computed path (greed)
 for node, neighbors in G.items():
         x, y = C[node]
-        for neighbor in neighbors:
-            nx, ny = C[neighbor]
-            plt.plot([x, nx], [y, ny], 'b-')
         if node in path:
             plt.plot(x, y, 'go')
         else:
             plt.plot(x, y, 'ro')
         #plt.text(x, y, str(node), fontsize=8, ha='right', va='bottom', color='black')
+        for neighbor in neighbors:
+            nx, ny = C[neighbor]
+            if node in path and neighbor in path:
+                plt.plot([x, nx], [y, ny], 'g-')
+            else:
+                plt.plot([x, nx], [y, ny], 'b-')
         try:
             name = OC[node]
             plt.text(x, y, str(name), fontsize=8, ha='right', va='bottom', color='black')
