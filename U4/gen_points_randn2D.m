@@ -1,4 +1,4 @@
-clc; clear; format long g;
+clc; clear; format long g; close all
 
 N = 50;
 
