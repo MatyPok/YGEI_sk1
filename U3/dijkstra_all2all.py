@@ -50,7 +50,7 @@ def dijkstra(G, start, end):
 
 
 
-'''# Test Graph
+# Test Graph
 G = {
     1 : {2:8, 3:4, 5:2},
     2 : {1:8, 3:5, 4:2, 7:6, 8:7},
@@ -61,7 +61,7 @@ G = {
     7 : {2:6, 3:4, 6:5, 8:3},
     8 : {2:7, 6:7, 7:3, 9:1},
     9 : {4:3, 6:10, 8:1}
-}'''
+}
 
 
 '''P, D = dijkstra(G, 1)
@@ -77,7 +77,7 @@ from matplotlib import pyplot as plt
 
 # Call the gpkg2graph function, as an argument select one of 3 options of cost metric,
 # and the .gpkg file for conversion, the default file silnice.gpkg
-G, C = lines2graph_gpkg(type_of_weight='Euclidean distance')
+#G, C = lines2graph_gpkg(type_of_weight='Euclidean distance')
 
 # call the dijkstra algorithm for every pair of nodes
 all_paths = []
