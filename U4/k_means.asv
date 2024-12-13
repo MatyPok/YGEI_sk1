@@ -5,7 +5,19 @@ clc; clear; format long g; close all
  M = load('data.mat'); % shluky ziskane z funkce gen_points_randn
 M = cell2mat(struct2cell(M));
 N = length(M);
+
 x = M(:,1); y = M(:,2);
+figure(3)
+hold on
+
+scatter(A(:,1),A(:,2), 'filled')
+scatter(B(:,1),B(:,2), 'filled')
+scatter(C(:,1),C(:,2), 'filled')
+
+M=[A;B;C];
+title('Vygenerované shluky')
+
+save('data.mat','M')
 
 %% Počet shluků
 n = input('Pocet shluku: ');
@@ -15,15 +27,17 @@ min_point = [min(x), min(y)]; % Bod s minimálními souřadnicemi
 max_point = [max(x), max(y)]; % Bod s maximálními souřadnicemi
 
 % 2. Rozmístění počátečních středů podél přímky
-xs = linspace(min_point(1), max_point(1), n)'; % Rovnoměrně mezi min(x) a max(x)
-ys = linspace(min_point(2), max_point(2), n)'; % Rovnoměrně mezi min(y) a max(y)
-S = [xs, ys]; % Počáteční středy
+xs = linspace(min_point(1), max_point(1), n+2)'; % Rovnoměrně mezi min(x) a max(x)
+ys = linspace(min_point(2), max_point(2), n+2)'; % Rovnoměrně mezi min(y) a max(y)
+S = [xs(2:end-1), ys(2:end-1)]; % Počáteční středy
 
 % Zobrazení dat a počátečních středů
 figure;
+
 scatter(x, y, 'filled'); hold on;
 plot([min_point(1), max_point(1)], [min_point(2), max_point(2)], 'r-', 'LineWidth', 1.5); % Diagonální přímka
 scatter(S(:,1), S(:,2), 100, 'g+'); % Počáteční středy
+grid on
 title('Počáteční rozmístění středů');
 hold off;
 
@@ -62,10 +76,25 @@ while any(dS > podminka) && iter < maxIter
     S = nove_S;
 end
 
+%% porovnani vysledku s kmeans funkci
+[idx,C] = kmeans(M,n);
+
+
 %% Vizualizace
 figure;
+subplot(1,2,1)
+grid on
 hold on;
 scatter(x, y, [], L, 'filled'); % Body barevně podle shluku
 scatter(S(:,1), S(:,2), 100, 'r+'); % Středy shluků
 title('Výsledek clusterizace');
 hold off;
+
+subplot(1,2,2)
+
+gscatter(M(:,1),M(:,2),idx,'bgm')
+hold on
+plot(C(:,1),C(:,2),'r+')
+legend off
+grid on
+title('Použití funkce kmeans')
