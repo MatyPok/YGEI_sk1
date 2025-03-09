@@ -50,12 +50,18 @@ void MainForm::on_actionWinding_Number_triggered()
     QPolygonF pol = ui->Canvas->getPol();
 
     //run algorithm
-    bool res = algorithms::WindingNumber(q,pol);
+    int res = algorithms::WindingNumber(q,pol);
 
     //show results
-    if(res)
+    if(res==1){
         setWindowTitle("Inside");
-    else
+    }else if(res==0){
         setWindowTitle("Outside");
+    }else if (res == -2){
+        setWindowTitle("Vertex");
+    }else if (res == -3){
+        setWindowTitle("Edges");
+    }
+
 }
 
