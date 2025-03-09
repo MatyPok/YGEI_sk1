@@ -1,7 +1,7 @@
 #include "mainform.h"
 #include "./ui_mainform.h"
 
-#include "algorithms.h""
+#include "algorithms.h"
 
 MainForm::MainForm(QWidget *parent)
     : QMainWindow(parent)
@@ -34,6 +34,26 @@ void MainForm::on_actionRay_Crossing_triggered()
 
     //show results
     if(res == 1)
+        setWindowTitle("Inside");
+    else
+        setWindowTitle("Outside");
+
+}
+
+
+void MainForm::on_actionWinding_Number_triggered()
+{
+    //RUN WINDING NUMBER ALGORITHM
+
+    //get data
+    QPointF q = ui->Canvas->getQ();
+    QPolygonF pol = ui->Canvas->getPol();
+
+    //run algorithm
+    bool res = algorithms::WindingNumber(q,pol);
+
+    //show results
+    if(res)
         setWindowTitle("Inside");
     else
         setWindowTitle("Outside");

@@ -7,6 +7,8 @@ class algorithms
 public:
     algorithms();
     static short analyzePointndPolPosition(const QPointF &q,const QPolygonF &pol);
+    static double get2LineAngle(const QPointF &p1,const QPointF &p2,const QPointF &p3,const QPointF &p4);
+    static bool WindingNumber(const QPointF &q, const QPolygonF &pol);
 };
 
 #endif // ALGORITHMS_H
