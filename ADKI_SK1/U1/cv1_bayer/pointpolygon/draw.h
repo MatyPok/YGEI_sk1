@@ -14,11 +14,15 @@ private:
 
 public:
     explicit Draw(QWidget *parent = nullptr);
+
     void mousePressEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *event);
     void switch_source();
+
     QPointF getQ() const{return q;}
     QPolygonF getPol() const{return pol;}
+
+    void openFile();
 
 signals:
 };

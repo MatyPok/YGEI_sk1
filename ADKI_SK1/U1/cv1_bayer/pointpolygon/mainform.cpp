@@ -3,6 +3,8 @@
 
 #include "algorithms.h"
 
+
+
 MainForm::MainForm(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainForm)
@@ -21,6 +23,8 @@ void MainForm::on_actionPoint_Polygon_triggered()
     ui->Canvas->switch_source();
 }
 
+
+
 void MainForm::on_actionRay_Crossing_triggered()
 {
     //RUN RAY CROSSING ALGORITHM
@@ -29,8 +33,12 @@ void MainForm::on_actionRay_Crossing_triggered()
     QPointF q = ui->Canvas->getQ();
     QPolygonF pol = ui->Canvas->getPol();
 
-    //run algorithm
-    short res = algorithms::analyzePointndPolPosition(q,pol);
+    short res = 0;
+
+    if (algorithms::isPointInMinMaxBoxOfPolygon(q,pol)){
+        //run algorithm
+        res = algorithms::analyzePointndPolPosition(q,pol);
+        }
 
     //show results
     if(res == 1)
@@ -49,8 +57,12 @@ void MainForm::on_actionWinding_Number_triggered()
     QPointF q = ui->Canvas->getQ();
     QPolygonF pol = ui->Canvas->getPol();
 
-    //run algorithm
-    int res = algorithms::WindingNumber(q,pol);
+    short res = 0;
+
+    if (algorithms::isPointInMinMaxBoxOfPolygon(q,pol)){
+        //run algorithm
+        res = algorithms::WindingNumber(q,pol);
+    }
 
     //show results
     if(res==1){
@@ -64,4 +76,27 @@ void MainForm::on_actionWinding_Number_triggered()
     }
 
 }
+
+
+
+void MainForm::on_actionOpen_triggered(){
+
+    //input polygons from txt
+    ui->Canvas->openFile();
+    //ui->Canvas->repaint();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 

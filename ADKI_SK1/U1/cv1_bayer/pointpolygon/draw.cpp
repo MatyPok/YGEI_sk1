@@ -1,5 +1,15 @@
 #include "draw.h"
 #include <QtGui>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QString>
+#include <QStringList>
+
+#include <iostream>
+using namespace std;
+
+#include <fstream>
 
 Draw::Draw(QWidget *parent)
     : QWidget{parent}
@@ -76,3 +86,72 @@ void Draw::switch_source()
     //input q or polzgon vertex
     add_point = !add_point;
 }
+
+
+
+void Draw::openFile()
+{
+    // open txt file with polygons
+    // open dialog for finding the txt file
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Text Files (*.txt);;All Files (*)"));
+
+    if (fileName.isEmpty()) {
+        return; // Pokud uživatel zrušil výběr souboru
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        qDebug() << "Chyba při otevírání souboru" << file.errorString();
+    }
+
+    QTextStream text(&file);
+    pol.clear();
+
+    while(!text.atEnd()){
+        QString line = text.readLine();//.trimmed(); // delete white spaces
+
+        if (line.isEmpty()) {
+            continue;  // skip empty lines
+        }
+
+        QStringList coordinates = line.split(",");
+
+        if (coordinates.size() == 2) {
+            bool okX, okY;
+            double x = coordinates[0].toDouble(&okX);
+            double y = coordinates[1].toDouble(&okY);
+
+
+            if (okX && okY) {
+
+                //Create point
+                QPointF p(x, y);
+
+                //Add point to polygon
+                pol.push_back(p);
+
+            } //else {
+            //    QMessageBox::warning(this, tr("Invalid Data"), tr("Invalid coordinates format in the file."));
+            //    return;
+            //}
+        }
+    }
+
+
+
+    file.close();
+
+
+    // Pokud polygon obsahuje alespoň 3 body, nastavíme ho do Canvasu
+    //if (pol.size() >= 3) {
+    //    ui->Canvas->setPolygon();  // Nastavení polygonu do Canvasu
+    //    setWindowTitle("Polygon Loaded");
+    //} //else {
+    //    QMessageBox::warning(this, tr("Invalid Polygon"), tr("The polygon is invalid. Please ensure it has at least 3 points."));
+    //}
+
+
+    repaint();
+
+}
+

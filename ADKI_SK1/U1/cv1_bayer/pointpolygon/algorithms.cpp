@@ -126,3 +126,50 @@ int algorithms::WindingNumber(const QPointF &q, const QPolygonF &pol) {
         return 0; // POINT IS OUTSIDE THE POLYGON
     }
 }
+
+
+bool algorithms::isPointInMinMaxBoxOfPolygon(const QPointF &q, const QPolygonF &pol){
+
+    double minx = -1e10;
+    double maxx = 1e10;
+
+    double miny = -1e10;
+    double maxy = 1e10;
+
+    // LOOP THROUGH EACH EDGE OF THE POLYGON
+    for (const QPointF &point : pol) {
+
+        // find the smallest and biggest x and y
+        if (point.x() > maxx) {
+            maxx = point.x();
+        }
+
+        if (point.x() < minx) {
+            minx = point.x();
+        }
+
+        if (point.y() > maxy) {
+            maxy = point.x();
+        }
+
+        if (point.y() < miny) {
+            miny = point.x();
+        }
+    }
+
+
+    if ( q.x() < maxx && q.x() > minx && q.y() < maxy && q.y() > miny){
+        return true; // point q is in the min max box of polygon
+    } else {
+        return false; // point q is not in the min max box of polygon
+    }
+
+}
+
+
+
+
+
+
+
+
