@@ -4,30 +4,33 @@ algorithms::algorithms() {}
 
 // RAY CROSSING ALGORITHM TO DETERMINE POINT IN POLYGON POSITION
 short algorithms::analyzePointndPolPosition(const QPointF &q, const QPolygonF &pol) {
-    int k = 0; // NUMBER OF INTERSECTIONS
-    int n = pol.size(); // NUMBER OF POLYGON EDGES
 
-    // LOOP THROUGH EACH EDGE OF THE POLYGON
-    for (int i = 0; i < n; i++) {
+        int k = 0; // NUMBER OF INTERSECTIONS
+        int n = pol.size(); // NUMBER OF POLYGON EDGES
 
-        // GET COORDINATES OF THE POINT RELATIVE TO THE POLYGON VERTICES
-        double xir = pol[i].x() - q.x(); // xi REDUCED
-        double yir = pol[i].y() - q.y(); // yi REDUCED
+        // LOOP THROUGH EACH EDGE OF THE POLYGON
+        for (int i = 0; i < n; i++) {
 
-        double xi1r = pol[(i + 1) % n].x() - q.x(); // xi+1 REDUCED
-        double yi1r = pol[(i + 1) % n].y() - q.y(); // yi+1 REDUCED
+            // GET COORDINATES OF THE POINT RELATIVE TO THE POLYGON VERTICES
+            double xir = pol[i].x() - q.x(); // xi REDUCED
+            double yir = pol[i].y() - q.y(); // yi REDUCED
 
-        // CHECK IF WE HAVE A SUITABLE SEGMENT TO CONSIDER
-        if ((yi1r > 0) && (yir <= 0) || (yir > 0) && (yi1r <= 0)) {
-            // POINT M IS IN THE RIGHT HALF-PLANE
-            double xm = (xi1r * yir - xir * yi1r) / (yi1r - yir);
-            if (xm > 0) {
-                k++;
+            double xi1r = pol[(i + 1) % n].x() - q.x(); // xi+1 REDUCED
+            double yi1r = pol[(i + 1) % n].y() - q.y(); // yi+1 REDUCED
+
+            // CHECK IF WE HAVE A SUITABLE SEGMENT TO CONSIDER
+            if ((yi1r > 0) && (yir <= 0) || (yir > 0) && (yi1r <= 0)) {
+                // POINT M IS IN THE RIGHT HALF-PLANE
+                double xm = (xi1r * yir - xir * yi1r) / (yi1r - yir);
+                if (xm > 0) {
+                    k++;
+                }
             }
         }
-    }
-    return k % 2; // IF THE NUMBER OF INTERSECTIONS IS ODD, THE POINT IS INSIDE
+
+        if (k % 2 == 1) return 1;            // IF THE NUMBER OF INTERSECTIONS IS ODD, THE POINT IS INSIDE
 }
+
 
 // FUNCTION TO CALCULATE THE ANGLE BETWEEN TWO VECTORS
 double algorithms::get2LineAngle(const QPointF &p1, const QPointF &p2, const QPointF &p3, const QPointF &p4) {
@@ -164,44 +167,6 @@ bool algorithms::isPointInMinMaxBoxOfPolygon(const QPointF &q, const QPolygonF &
         return false; // point q is not in the min max box of polygon
     }
 
-}
-
-
-QPolygonF algorithms::normalizePolygon(const QPolygonF &inputPol, double canvasWidth, double canvasHeight) {
-    if (inputPol.isEmpty()) {
-        return {};
-    }
-
-    // Najdi minimální a maximální hodnoty souřadnic
-    double minX = inputPol.first().x();
-    double minY = inputPol.first().y();
-    double maxX = minX, maxY = minY;
-
-    for (const QPointF &p : inputPol) {
-        minX = qMin(minX, p.x());
-        minY = qMin(minY, p.y());
-        maxX = qMax(maxX, p.x());
-        maxY = qMax(maxY, p.y());
-    }
-
-    // Výpočet měřítka pro normalizaci na canvas (max 800 px)
-    double scaleX = (maxX - minX) != 0 ? (canvasWidth / (maxX - minX)) : 1.0;
-    double scaleY = (maxY - minY) != 0 ? (canvasHeight / (maxY - minY)) : 1.0;
-    double scale = qMin(scaleX, scaleY); // Zachování poměru stran
-
-    // Normalizace bodů
-    QPolygonF normalizedPol;
-    for (const QPointF &p : inputPol) {
-        double normX = (p.x() - minX) * scale;
-        double normY = (p.y() - minY) * scale;
-
-        // Otočení osy Y
-        normY = canvasHeight - normY;
-
-        normalizedPol.append(QPointF(normX, normY));
-    }
-
-    return normalizedPol;
 }
 
 

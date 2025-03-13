@@ -35,6 +35,7 @@ public:
 
     QPointF getQ() const{return q;}
     QPolygonF getPol() const{return pol;}
+    QVector<QPolygonF> getPolygons() const{return polygons;}
 
     void openFile();
     void openSHP();
