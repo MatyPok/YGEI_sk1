@@ -36,3 +36,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     images.qrc
+
+
+INCLUDEPATH += /usr/include/gdal  # Cesta k GDAL
+LIBS += -lgdal

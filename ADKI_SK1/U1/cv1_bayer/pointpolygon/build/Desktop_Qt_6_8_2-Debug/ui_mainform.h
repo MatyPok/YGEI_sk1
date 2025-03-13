@@ -33,6 +33,7 @@ public:
     QAction *actionWinding_Number;
     QAction *actionRay_Crossing;
     QAction *actionClear_all;
+    QAction *actionOpen_SHP;
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout;
     Draw *Canvas;
@@ -84,6 +85,10 @@ public:
         QIcon icon6;
         icon6.addFile(QString::fromUtf8("images/icons/clear_all.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
         actionClear_all->setIcon(icon6);
+        actionOpen_SHP = new QAction(MainForm);
+        actionOpen_SHP->setObjectName("actionOpen_SHP");
+        QIcon icon7(QIcon::fromTheme(QIcon::ThemeIcon::DocumentOpen));
+        actionOpen_SHP->setIcon(icon7);
         centralwidget = new QWidget(MainForm);
         centralwidget->setObjectName("centralwidget");
         horizontalLayout = new QHBoxLayout(centralwidget);
@@ -120,6 +125,7 @@ public:
         menubar->addAction(menuInput->menuAction());
         menubar->addAction(menuAnalyze->menuAction());
         menuFile->addAction(actionOpen);
+        menuFile->addAction(actionOpen_SHP);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuInput->addAction(actionPoint_Polygon);
@@ -148,7 +154,7 @@ public:
     void retranslateUi(QMainWindow *MainForm)
     {
         MainForm->setWindowTitle(QCoreApplication::translate("MainForm", "Analyze point and polyhon position", nullptr));
-        actionOpen->setText(QCoreApplication::translate("MainForm", "Open", nullptr));
+        actionOpen->setText(QCoreApplication::translate("MainForm", " Open TXT", nullptr));
 #if QT_CONFIG(tooltip)
         actionOpen->setToolTip(QCoreApplication::translate("MainForm", "Open a file", nullptr));
 #endif // QT_CONFIG(tooltip)
@@ -173,6 +179,7 @@ public:
 #if QT_CONFIG(tooltip)
         actionClear_all->setToolTip(QCoreApplication::translate("MainForm", "Clear all data and results", nullptr));
 #endif // QT_CONFIG(tooltip)
+        actionOpen_SHP->setText(QCoreApplication::translate("MainForm", "Open SHP", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainForm", "File", nullptr));
         menuInput->setTitle(QCoreApplication::translate("MainForm", "Input", nullptr));
         menuAnalyze->setTitle(QCoreApplication::translate("MainForm", "Analyze", nullptr));

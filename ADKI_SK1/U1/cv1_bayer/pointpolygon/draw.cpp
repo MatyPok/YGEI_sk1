@@ -6,10 +6,15 @@
 #include <QString>
 #include <QStringList>
 
+
 #include <iostream>
 using namespace std;
 
 #include <fstream>
+
+#include <ogrsf_frmts.h>
+#include "algorithms.h"
+
 
 Draw::Draw(QWidget *parent)
     : QWidget{parent}
@@ -17,6 +22,7 @@ Draw::Draw(QWidget *parent)
     q.setX(0);
     q.setY(0);
     add_point = false;
+    isShapefileLoaded = false;
 
 }
 
@@ -30,54 +36,53 @@ void Draw::mousePressEvent(QMouseEvent *e)
     double y = e->pos().y();
 
     // Set x,y to q
-    if(add_point)
-    {
+    if (add_point) {
+
         q.setX(x);
         q.setY(y);
-    }
 
-        //add point to polygon
-    else
-    {
+    } else {
 
-        //Create point
         QPointF p(x, y);
-
-        //Add point to polygon
-        pol.push_back(p);
+        if (!polygons.isEmpty()) {
+            polygons.last().append(p); // Přidáváme do posledního polygonu
+        }
     }
-
     //Repaint screen
     repaint();
 }
 
 
+
+// Vykreslení všech polygonů
 void Draw::paintEvent(QPaintEvent *event)
 {
-    //Draw
-    QPainter painter(this);
 
-    //Create object for drawing
+    QPainter painter(this);
     painter.begin(this);
 
-    //Set graphic attributes for polygon
+    // Draw all polygons
     painter.setPen(Qt::GlobalColor::red);
     painter.setBrush(Qt::GlobalColor::yellow);
+    for (int i = 0; i < polygons.size(); i++) {
+        if (i != highlightedIndex) {
+            painter.drawPolygon(polygons[i]); // Draw all except the highlighted polygon
+        }
+    }
 
-    //Draw draw
-    painter.drawPolygon(pol);
+    // Draw the highlighted polygon (if any)
+    if (highlightedIndex >= 0 && highlightedIndex < polygons.size()) {
+        painter.setPen(Qt::GlobalColor::red);
+        painter.setBrush(Qt::GlobalColor::green);
+        painter.drawPolygon(polygons[highlightedIndex]);
+    }
 
-    //Set graphic attributes for point
+    // Draw point q
     painter.setPen(Qt::GlobalColor::black);
     painter.setBrush(Qt::GlobalColor::blue);
+    int r = 5;
+    painter.drawEllipse(q.x() - r, q.y() - r, 2 * r, 2 * r);
 
-    int r = 5; // nastavim velikost polomeru bodu v px
-
-    //Draw point
-    painter.drawEllipse(q.x()-r, q.y()-r,2*r,2*r);
-
-
-    //End draw
     painter.end();
 }
 
@@ -89,29 +94,51 @@ void Draw::switch_source()
 
 
 
+
+void Draw::highlightPolygon(int index)
+{
+    // Check if index is valid
+    if (index < 0 || index >= polygons.size()) {
+        qDebug() << "Invalid polygon index!";
+        return;
+    }
+
+    highlightedIndex = index;  // Set the highlighted polygon index
+    repaint();  // Repaint the widget to show the highlighted polygon
+}
+
+
+
+
 void Draw::openFile()
 {
-    // open txt file with polygons
-    // open dialog for finding the txt file
+    // Open txt file with polygons
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Text Files (*.txt);;All Files (*)"));
 
     if (fileName.isEmpty()) {
-        return; // Pokud uživatel zrušil výběr souboru
+        return; // If the user cancels the file selection
     }
 
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        qDebug() << "Chyba při otevírání souboru" << file.errorString();
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Error opening file:" << file.errorString();
+        return;
     }
 
     QTextStream text(&file);
-    pol.clear();
+    polygons.clear();  // Clear previous polygons
 
-    while(!text.atEnd()){
-        QString line = text.readLine();//.trimmed(); // delete white spaces
+    QVector<QPointF> currentPolygon;  // Temporary container for points of a polygon
+
+    while (!text.atEnd()) {
+        QString line = text.readLine().trimmed();  // Trim white spaces
 
         if (line.isEmpty()) {
-            continue;  // skip empty lines
+            if (!currentPolygon.isEmpty()) {
+                polygons.push_back(QPolygonF(currentPolygon));  // Push the polygon to the vector
+                currentPolygon.clear();  // Start a new polygon
+            }
+            continue;
         }
 
         QStringList coordinates = line.split(",");
@@ -121,37 +148,78 @@ void Draw::openFile()
             double x = coordinates[0].toDouble(&okX);
             double y = coordinates[1].toDouble(&okY);
 
-
             if (okX && okY) {
-
-                //Create point
-                QPointF p(x, y);
-
-                //Add point to polygon
-                pol.push_back(p);
-
-            } //else {
-            //    QMessageBox::warning(this, tr("Invalid Data"), tr("Invalid coordinates format in the file."));
-            //    return;
-            //}
+                // Add the point to the current polygon
+                currentPolygon.append(QPointF(x, y));
+            }
         }
     }
 
-
+    if (!currentPolygon.isEmpty()) {
+        polygons.push_back(QPolygonF(currentPolygon));  // Add last polygon
+    }
 
     file.close();
+    repaint();  // Repaint the widget to show the new polygons
+
+    add_point = true;  // Switch to add points mode
+}
 
 
-    // Pokud polygon obsahuje alespoň 3 body, nastavíme ho do Canvasu
-    //if (pol.size() >= 3) {
-    //    ui->Canvas->setPolygon();  // Nastavení polygonu do Canvasu
-    //    setWindowTitle("Polygon Loaded");
-    //} //else {
-    //    QMessageBox::warning(this, tr("Invalid Polygon"), tr("The polygon is invalid. Please ensure it has at least 3 points."));
-    //}
+// **Načítání polygonů ze SHP souboru**
+void Draw::openSHP()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Shape Files (*.shp);;All Files (*)"));
+    if (fileName.isEmpty()) return;
 
+    GDALAllRegister();
+    GDALDataset *poDS = (GDALDataset *)GDALOpenEx(fileName.toUtf8().constData(), GDAL_OF_VECTOR, nullptr, nullptr, nullptr);
+    if (!poDS) {
+        qDebug() << "Open failed\n";
+        return;
+    }
+
+    OGRLayer *poLayer = poDS->GetLayer(0);
+    if (!poLayer) {
+        qDebug() << "Chyba: SHP soubor neobsahuje žádnou vrstvu!";
+        GDALClose(poDS);
+        return;
+    }
+
+    polygons.clear();
+
+    OGRFeature *poFeature = nullptr;
+    poLayer->ResetReading();
+    while ((poFeature = poLayer->GetNextFeature()) != nullptr) {
+        OGRGeometry *poGeometry = poFeature->GetGeometryRef();
+        if (poGeometry && wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon) {
+            OGRPolygon *poPolygon = dynamic_cast<OGRPolygon *>(poGeometry);
+            if (poPolygon) {
+                QPolygonF qPolygon;
+                OGRLinearRing *poRing = poPolygon->getExteriorRing();
+                if (poRing) {
+                    int numPoints = poRing->getNumPoints();
+                    for (int i = 0; i < numPoints; i++) {
+                        double x = poRing->getX(i);
+                        double y = poRing->getY(i);
+                        qPolygon.append(QPointF(x, y));
+                    }
+                }
+                polygons.append(qPolygon);
+            }
+        }
+        OGRFeature::DestroyFeature(poFeature);
+    }
+
+    GDALClose(poDS);
+
+    algorithms::normalizePolygons(polygons, width(), height());
 
     repaint();
 
+    add_point = true;  // Switch to add points mode
 }
+
+
+
 

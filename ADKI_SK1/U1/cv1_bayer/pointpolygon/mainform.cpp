@@ -2,7 +2,7 @@
 #include "./ui_mainform.h"
 
 #include "algorithms.h"
-
+#include "gdal_priv.h"
 
 
 MainForm::MainForm(QWidget *parent)
@@ -41,11 +41,12 @@ void MainForm::on_actionRay_Crossing_triggered()
         }
 
     //show results
-    if(res == 1)
+    if(res == 1){
         setWindowTitle("Inside");
-    else
+        ui->Canvas->highlightPolygon(0);
+    } else {
         setWindowTitle("Outside");
-
+    }
 }
 
 
@@ -67,6 +68,7 @@ void MainForm::on_actionWinding_Number_triggered()
     //show results
     if(res==1){
         setWindowTitle("Inside");
+        ui->Canvas->highlightPolygon(0);
     }else if(res==0){
         setWindowTitle("Outside");
     }else if (res == -2){
@@ -88,6 +90,25 @@ void MainForm::on_actionOpen_triggered(){
 }
 
 
+
+void MainForm::on_actionOpen_SHP_triggered()
+{
+    //load shp with gdal
+    ui->Canvas->openSHP();
+}
+
+
+
+void MainForm::on_actionHighlight_Polygon_triggered()
+{
+    // Highlight the first polygon (index 0) - or prompt for user input to choose which one
+    if (!ui->Canvas->getPol().isEmpty()) {
+        ui->Canvas->highlightPolygon(0);  // Pass index of the polygon you want to highlight
+    }
+    else {
+        qDebug() << "No polygons available to highlight!";
+    }
+}
 
 
 

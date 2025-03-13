@@ -167,8 +167,84 @@ bool algorithms::isPointInMinMaxBoxOfPolygon(const QPointF &q, const QPolygonF &
 }
 
 
+QPolygonF algorithms::normalizePolygon(const QPolygonF &inputPol, double canvasWidth, double canvasHeight) {
+    if (inputPol.isEmpty()) {
+        return {};
+    }
+
+    // Najdi minimální a maximální hodnoty souřadnic
+    double minX = inputPol.first().x();
+    double minY = inputPol.first().y();
+    double maxX = minX, maxY = minY;
+
+    for (const QPointF &p : inputPol) {
+        minX = qMin(minX, p.x());
+        minY = qMin(minY, p.y());
+        maxX = qMax(maxX, p.x());
+        maxY = qMax(maxY, p.y());
+    }
+
+    // Výpočet měřítka pro normalizaci na canvas (max 800 px)
+    double scaleX = (maxX - minX) != 0 ? (canvasWidth / (maxX - minX)) : 1.0;
+    double scaleY = (maxY - minY) != 0 ? (canvasHeight / (maxY - minY)) : 1.0;
+    double scale = qMin(scaleX, scaleY); // Zachování poměru stran
+
+    // Normalizace bodů
+    QPolygonF normalizedPol;
+    for (const QPointF &p : inputPol) {
+        double normX = (p.x() - minX) * scale;
+        double normY = (p.y() - minY) * scale;
+
+        // Otočení osy Y
+        normY = canvasHeight - normY;
+
+        normalizedPol.append(QPointF(normX, normY));
+    }
+
+    return normalizedPol;
+}
 
 
+void algorithms::normalizePolygons(QVector<QPolygonF>& polygons, int width, int height)
+{
+    // Vypočítáme těžiště všech polygonů
+    QPointF centroid = calculateCentroid(polygons);
+
+    // Posuneme všechny polygony tak, aby těžiště bylo na středu okna
+    qreal offsetX = width / 2 - centroid.x();
+    qreal offsetY = height / 2 - centroid.y();
+
+    // Pro každý polygon přepočítáme souřadnice bodů
+    for (QPolygonF& polygon : polygons) {
+        for (QPointF& point : polygon) {
+            point.setX(point.x() + offsetX);
+            point.setY(point.y() + offsetY);
+        }
+    }
+}
+
+
+QPointF algorithms::calculateCentroid(const QVector<QPolygonF>& polygons)
+{
+    qreal totalX = 0;
+    qreal totalY = 0;
+    int pointCount = 0;
+
+    for (const QPolygonF& polygon : polygons) {
+        for (const QPointF& point : polygon) {
+            totalX += point.x();
+            totalY += point.y();
+            pointCount++;
+        }
+    }
+
+    if (pointCount == 0) {
+        return QPointF(0, 0);  // Vrátíme bod (0, 0) pokud žádný bod neexistuje
+    }
+
+    // Vraťte průměrné těžiště
+    return QPointF(totalX / pointCount, totalY / pointCount);
+}
 
 
 

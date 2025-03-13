@@ -17,7 +17,7 @@ CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
-INCPATH       = -I../../../pointpolygon -I. -I/home/poky/Qt/6.8.2/gcc_64/include -I/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets -I/home/poky/Qt/6.8.2/gcc_64/include/QtGui -I/home/poky/Qt/6.8.2/gcc_64/include/QtCore -I. -I. -I/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../../../pointpolygon -I. -I/usr/include/gdal -I/home/poky/Qt/6.8.2/gcc_64/include -I/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets -I/home/poky/Qt/6.8.2/gcc_64/include/QtGui -I/home/poky/Qt/6.8.2/gcc_64/include/QtCore -I. -I. -I/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/poky/Qt/6.8.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = PointInPolygon1.0.0
 DISTDIR = /home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon/build/Desktop_Qt_6_8_2-Debug/.tmp/PointInPolygon1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/poky/Qt/6.8.2/gcc_64/lib -Wl,-rpath-link,/home/poky/Qt/6.8.2/gcc_64/lib
-LIBS          = $(SUBLIBS) /home/poky/Qt/6.8.2/gcc_64/lib/libQt6Widgets.so /home/poky/Qt/6.8.2/gcc_64/lib/libQt6Gui.so /home/poky/Qt/6.8.2/gcc_64/lib/libQt6Core.so -lpthread -lGL   
+LIBS          = $(SUBLIBS) -lgdal /home/poky/Qt/6.8.2/gcc_64/lib/libQt6Widgets.so /home/poky/Qt/6.8.2/gcc_64/lib/libQt6Gui.so /home/poky/Qt/6.8.2/gcc_64/lib/libQt6Core.so -lpthread -lGL   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -276,6 +276,7 @@ DIST          = /home/poky/Qt/6.8.2/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/spec_post.prf \
+		../../.qmake.stash \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -525,6 +526,7 @@ Makefile: ../../PointInPolygon.pro /home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++/
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/poky/Qt/6.8.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -763,6 +765,7 @@ Makefile: ../../PointInPolygon.pro /home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++/
 /home/poky/Qt/6.8.2/gcc_64/mkspecs/features/qt_config.prf:
 /home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/poky/Qt/6.8.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/poky/Qt/6.8.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/poky/Qt/6.8.2/gcc_64/mkspecs/features/toolchain.prf:
 /home/poky/Qt/6.8.2/gcc_64/mkspecs/features/default_pre.prf:
@@ -1046,7 +1049,7 @@ moc_draw.cpp: ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qguiapplication_platform.h \
 		moc_predefs.h \
 		/home/poky/Qt/6.8.2/gcc_64/libexec/moc
-	/home/poky/Qt/6.8.2/gcc_64/libexec/moc $(DEFINES) --include /home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon/build/Desktop_Qt_6_8_2-Debug/moc_predefs.h -I/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++ -I/home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon -I/home/poky/Qt/6.8.2/gcc_64/include -I/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets -I/home/poky/Qt/6.8.2/gcc_64/include/QtGui -I/home/poky/Qt/6.8.2/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../draw.h -o moc_draw.cpp
+	/home/poky/Qt/6.8.2/gcc_64/libexec/moc $(DEFINES) --include /home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon/build/Desktop_Qt_6_8_2-Debug/moc_predefs.h -I/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++ -I/home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon -I/usr/include/gdal -I/home/poky/Qt/6.8.2/gcc_64/include -I/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets -I/home/poky/Qt/6.8.2/gcc_64/include/QtGui -I/home/poky/Qt/6.8.2/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../draw.h -o moc_draw.cpp
 
 moc_mainform.cpp: ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QMainWindow \
@@ -1241,7 +1244,7 @@ moc_mainform.cpp: ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtabwidget.h \
 		moc_predefs.h \
 		/home/poky/Qt/6.8.2/gcc_64/libexec/moc
-	/home/poky/Qt/6.8.2/gcc_64/libexec/moc $(DEFINES) --include /home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon/build/Desktop_Qt_6_8_2-Debug/moc_predefs.h -I/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++ -I/home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon -I/home/poky/Qt/6.8.2/gcc_64/include -I/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets -I/home/poky/Qt/6.8.2/gcc_64/include/QtGui -I/home/poky/Qt/6.8.2/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainform.h -o moc_mainform.cpp
+	/home/poky/Qt/6.8.2/gcc_64/libexec/moc $(DEFINES) --include /home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon/build/Desktop_Qt_6_8_2-Debug/moc_predefs.h -I/home/poky/Qt/6.8.2/gcc_64/mkspecs/linux-g++ -I/home/poky/Dokumenty/SEM8/ADKI/ADKI_SK1/U1/cv1_bayer/pointpolygon -I/usr/include/gdal -I/home/poky/Qt/6.8.2/gcc_64/include -I/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets -I/home/poky/Qt/6.8.2/gcc_64/include/QtGui -I/home/poky/Qt/6.8.2/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainform.h -o moc_mainform.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -2258,7 +2261,14 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiversion.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qundogroup.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qundostack.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qvalidator.h
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qvalidator.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QFileDialog \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qfiledialog.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qdialog.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QFile \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QTextStream \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVector \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QPolygonF
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o draw.o ../../draw.cpp
 
 main.o: ../../main.cpp ../../mainform.h \
@@ -2648,6 +2658,25 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtabwidget.h \
 		ui_mainform.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVariant \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QAction \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QApplication \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qapplication.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qlayout.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QMenu \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qmenu.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QMenuBar \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qmenubar.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QStatusBar \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qstatusbar.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QToolBar \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtoolbar.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
+		../../draw.h \
 		../../algorithms.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QtGui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QtGuiDepends \
@@ -2771,7 +2800,6 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qurlquery.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvarianthash.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QHash \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVariant \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QString \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantlist.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantmap.h \

@@ -26,6 +26,10 @@ private slots:
 
     void on_actionOpen_triggered();
 
+    void on_actionOpen_SHP_triggered();
+
+    void on_actionHighlight_Polygon_triggered();
+
 private:
     Ui::MainForm *ui;
 };
