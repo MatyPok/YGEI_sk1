@@ -859,10 +859,10 @@ compiler_moc_header_make_all: moc_draw.cpp moc_mainform.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_draw.cpp moc_mainform.cpp
 moc_draw.cpp: ../../draw.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qwidget.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QObject \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qnamespace.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qglobal.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtversionchecks.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtconfiginclude.h \
@@ -908,20 +908,12 @@ moc_draw.cpp: ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtresource.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qttranslation.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qversiontagging.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtgui-config.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiexports.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsexports.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qwindowdefs.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qnamespace.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcompare.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcomparehelpers.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q20type_traits.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtmetamacros.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfunctionaltools_impl.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qstring.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qchar.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qstringview.h \
@@ -968,16 +960,33 @@ moc_draw.cpp: ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qscopeguard.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject_impl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qbindingstorage.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qmargins.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVector \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QPolygonF \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpolygon.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtgui-config.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiexports.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q23utility.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qrect.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qmargins.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qsize.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QFile \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qiodevice.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qwidget.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qaction.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qkeysequence.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qicon.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qsize.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpixmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpaintdevice.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qrect.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qcolor.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qrgb.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qrgba64.h \
@@ -985,7 +994,6 @@ moc_draw.cpp: ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qimage.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpixelformat.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtransform.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpolygon.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qregion.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qspan.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q20iterator.h \
@@ -1011,7 +1019,6 @@ moc_draw.cpp: ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qcursor.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qbitmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qevent.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qiodevice.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qurl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qeventpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qvector2d.h \
@@ -1020,7 +1027,6 @@ moc_draw.cpp: ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qinputdevice.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qscreen.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QList \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QObject \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QRect \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QSize \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QSizeF \
@@ -1256,10 +1262,10 @@ compiler_uic_clean:
 ui_mainform.h: ../../mainform.ui \
 		/home/poky/Qt/6.8.2/gcc_64/libexec/uic \
 		../../draw.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qwidget.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QObject \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qnamespace.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qglobal.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtversionchecks.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtconfiginclude.h \
@@ -1305,20 +1311,12 @@ ui_mainform.h: ../../mainform.ui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtresource.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qttranslation.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qversiontagging.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtgui-config.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiexports.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsexports.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qwindowdefs.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qnamespace.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcompare.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcomparehelpers.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q20type_traits.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtmetamacros.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfunctionaltools_impl.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qstring.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qchar.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qstringview.h \
@@ -1365,16 +1363,33 @@ ui_mainform.h: ../../mainform.ui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qscopeguard.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject_impl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qbindingstorage.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qmargins.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVector \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QPolygonF \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpolygon.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtgui-config.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiexports.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q23utility.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qrect.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qmargins.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qsize.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QFile \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qiodevice.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qwidget.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qaction.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qkeysequence.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qicon.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qsize.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpixmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpaintdevice.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qrect.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qcolor.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qrgb.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qrgba64.h \
@@ -1382,7 +1397,6 @@ ui_mainform.h: ../../mainform.ui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qimage.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpixelformat.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtransform.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpolygon.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qregion.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qspan.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q20iterator.h \
@@ -1408,7 +1422,6 @@ ui_mainform.h: ../../mainform.ui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qcursor.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qbitmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qevent.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qiodevice.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qurl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qeventpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qvector2d.h \
@@ -1417,7 +1430,6 @@ ui_mainform.h: ../../mainform.ui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qinputdevice.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qscreen.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QList \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QObject \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QRect \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QSize \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QSizeF \
@@ -1858,10 +1870,10 @@ algorithms.o: ../../algorithms.cpp ../../algorithms.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o algorithms.o ../../algorithms.cpp
 
 draw.o: ../../draw.cpp ../../draw.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qwidget.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QObject \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qnamespace.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qglobal.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtversionchecks.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtconfiginclude.h \
@@ -1907,20 +1919,12 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtresource.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qttranslation.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qversiontagging.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtgui-config.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiexports.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsexports.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qwindowdefs.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qnamespace.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcompare.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcomparehelpers.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q20type_traits.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtmetamacros.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfunctionaltools_impl.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qstring.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qchar.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qstringview.h \
@@ -1967,16 +1971,33 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qscopeguard.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qobject_impl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qbindingstorage.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qmargins.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVector \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QPolygonF \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpolygon.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtgui-config.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiexports.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q23utility.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qrect.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qmargins.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qsize.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QFile \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qiodevice.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qwidget.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qaction.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qkeysequence.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qicon.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qsize.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpixmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpaintdevice.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qrect.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qcolor.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qrgb.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qrgba64.h \
@@ -1984,7 +2005,6 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qimage.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpixelformat.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtransform.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qpolygon.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qregion.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qspan.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/q20iterator.h \
@@ -2010,7 +2030,6 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qcursor.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qbitmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qevent.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qiodevice.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qurl.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qeventpoint.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qvector2d.h \
@@ -2019,7 +2038,6 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qinputdevice.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qscreen.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QList \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QObject \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QRect \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QSize \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QSizeF \
@@ -2093,8 +2111,6 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcryptographichash.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdir.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdirlisting.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfileinfo.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtimezone.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdiriterator.h \
@@ -2173,7 +2189,6 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantlist.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QMap \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qwaitcondition.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QDeadlineTimer \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qwineventnotifier.h \
@@ -2265,10 +2280,8 @@ draw.o: ../../draw.cpp ../../draw.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QFileDialog \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qfiledialog.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qdialog.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QFile \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QTextStream \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVector \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QPolygonF
+		../../algorithms.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o draw.o ../../draw.cpp
 
 main.o: ../../main.cpp ../../mainform.h \
@@ -2677,6 +2690,12 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtoolbar.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
 		../../draw.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVector \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QPolygonF \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QFile \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
 		../../algorithms.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QtGui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QtGuiDepends \
@@ -2725,8 +2744,6 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcryptographichash.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdir.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdirlisting.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfileinfo.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtimezone.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdiriterator.h \
@@ -2804,7 +2821,6 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantlist.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QMap \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qwaitcondition.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QDeadlineTimer \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qwineventnotifier.h \

@@ -135,6 +135,7 @@ public:
         menuAnalyze->addAction(actionWinding_Number);
         menuAnalyze->addAction(actionRay_Crossing);
         toolBar->addAction(actionOpen);
+        toolBar->addAction(actionOpen_SHP);
         toolBar->addSeparator();
         toolBar->addAction(actionPoint_Polygon);
         toolBar->addSeparator();
@@ -153,7 +154,7 @@ public:
 
     void retranslateUi(QMainWindow *MainForm)
     {
-        MainForm->setWindowTitle(QCoreApplication::translate("MainForm", "Analyze point and polyhon position", nullptr));
+        MainForm->setWindowTitle(QCoreApplication::translate("MainForm", "Analyze point and polygon position", nullptr));
         actionOpen->setText(QCoreApplication::translate("MainForm", " Open TXT", nullptr));
 #if QT_CONFIG(tooltip)
         actionOpen->setToolTip(QCoreApplication::translate("MainForm", "Open a file", nullptr));

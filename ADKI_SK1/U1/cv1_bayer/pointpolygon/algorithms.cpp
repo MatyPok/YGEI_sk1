@@ -172,18 +172,17 @@ bool algorithms::isPointInMinMaxBoxOfPolygon(const QPointF &q, const QPolygonF &
 
 void algorithms::normalizePolygons(QVector<QPolygonF>& polygons, int width, int height)
 {
-    // Vypočítáme těžiště všech polygonů
+    // center of mass of all polygons
     QPointF centroid = calculateCentroid(polygons);
 
-    // Posuneme všechny polygony tak, aby těžiště bylo na středu okna
+    // move all polygons so they are at the center of window
     qreal offsetX = width / 2 - centroid.x();
     qreal offsetY = height / 2 - centroid.y();
 
-    // Pro každý polygon přepočítáme souřadnice bodů
     for (QPolygonF& polygon : polygons) {
         for (QPointF& point : polygon) {
             point.setX(point.x() + offsetX);
-            point.setY(point.y() + offsetY);
+            point.setY(height - (point.y() + offsetY));
         }
     }
 }
@@ -204,7 +203,7 @@ QPointF algorithms::calculateCentroid(const QVector<QPolygonF>& polygons)
     }
 
     if (pointCount == 0) {
-        return QPointF(0, 0);  // Vrátíme bod (0, 0) pokud žádný bod neexistuje
+        return QPointF(0, 0); // return (0,0) if there is no such a point
     }
 
     // Vraťte průměrné těžiště

@@ -28,7 +28,11 @@ private slots:
 
     void on_actionOpen_SHP_triggered();
 
-    void on_actionHighlight_Polygon_triggered();
+    void on_actionExit_triggered();
+
+    void on_actionClear_data_triggered();
+
+    void on_actionClear_all_triggered();
 
 private:
     Ui::MainForm *ui;

@@ -45,16 +45,29 @@ void Draw::mousePressEvent(QMouseEvent *e)
 
         QPointF p(x, y);
         if (!polygons.isEmpty()) {
-            polygons.last().append(p); // Přidáváme do posledního polygonu
+            polygons.last().append(p);
         }
     }
     //Repaint screen
     repaint();
 }
 
+void Draw::clearPolygons()
+{
+    polygons.clear();
+    repaint();
 
+}
 
-// Vykreslení všech polygonů
+void Draw::clear()
+{
+    polygons.clear();
+    q.setX(0);
+    q.setY(0);
+    repaint();
+
+}
+
 void Draw::paintEvent(QPaintEvent *event)
 {
 
@@ -181,7 +194,7 @@ void Draw::openSHP()
 
     OGRLayer *poLayer = poDS->GetLayer(0);
     if (!poLayer) {
-        qDebug() << "Chyba: SHP soubor neobsahuje žádnou vrstvu!";
+        qDebug() << "Error: Shape file doesn't contain any layers!";
         GDALClose(poDS);
         return;
     }

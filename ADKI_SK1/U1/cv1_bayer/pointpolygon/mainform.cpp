@@ -4,6 +4,7 @@
 #include "algorithms.h"
 #include "gdal_priv.h"
 
+#include "QApplication"
 
 MainForm::MainForm(QWidget *parent)
     : QMainWindow(parent)
@@ -109,25 +110,22 @@ void MainForm::on_actionOpen_SHP_triggered()
 
 
 
-void MainForm::on_actionHighlight_Polygon_triggered()
+
+void MainForm::on_actionExit_triggered()
 {
-    // Highlight the first polygon (index 0) - or prompt for user input to choose which one
-    QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
-    if (!polygons.isEmpty()) {
-        ui->Canvas->highlightPolygon(0);
-    } else {
-        qDebug() << "No polygons available to highlight!";
-    }
+    QApplication::quit();
 }
 
+void MainForm::on_actionClear_data_triggered()
+{
+    ui->Canvas->clearPolygons();
+    repaint();
+}
 
+void MainForm::on_actionClear_all_triggered()
+{
+    ui->Canvas->clear();
 
-
-
-
-
-
-
-
-
+    repaint();
+}
 

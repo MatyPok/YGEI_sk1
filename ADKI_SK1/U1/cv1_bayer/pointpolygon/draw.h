@@ -19,8 +19,8 @@ private:
     QPointF q;
     QPolygonF pol;
 
-    QVector<QPolygonF> polygons;  // Vektor pro uložení polygonů
-    int highlightedIndex = -1; // Pro uchování indexu zvýrazněného polygonu
+    QVector<QPolygonF> polygons;
+    int highlightedIndex = -1;
 
     bool add_point;
     bool isShapefileLoaded;
@@ -36,9 +36,12 @@ public:
     QPointF getQ() const{return q;}
     QPolygonF getPol() const{return pol;}
     QVector<QPolygonF> getPolygons() const{return polygons;}
+    void clearPolygons();
 
     void openFile();
     void openSHP();
+
+    void clear();
 
 signals:
 };
