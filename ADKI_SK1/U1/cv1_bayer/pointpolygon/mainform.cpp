@@ -24,8 +24,6 @@ void MainForm::on_actionPoint_Polygon_triggered()
     ui->Canvas->switch_source();
 }
 
-
-
 void MainForm::on_actionRay_Crossing_triggered()
 {
     //RUN RAY CROSSING ALGORITHM
@@ -34,28 +32,42 @@ void MainForm::on_actionRay_Crossing_triggered()
     QPointF q = ui->Canvas->getQ();
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
 
+    ui->Canvas->clearHighlighted();
+    QVector<int> indices;
     short res = 0;
-    int index= -1;
+
+    bool isInside = false;
+    bool isInVertex = false;
+    bool isOnEdge = false;
 
     for (int i = 0; i < polygons.size(); ++i) {
         if (algorithms::isPointInMinMaxBoxOfPolygon(q, polygons[i])) {
             res = algorithms::analyzePointndPolPosition(q, polygons[i]);
+
             if (res == 1) {
-                index = i;
-                break;
+                indices.push_back(i);
+                isInside = true;
+            } else if (res == -2) {
+                indices.push_back(i);
+                isInVertex = true;
+            } else if (res == -1) {
+                isOnEdge = true;
+                indices.push_back(i);
             }
+
         }
     }
 
-    //show results
-    if (index != -1) {
-        setWindowTitle("Inside");
-        ui->Canvas->highlightPolygon(index);
-    } else {
-        setWindowTitle("Outside");
-    }
-}
+    ui->Canvas->highlightPolygon(indices);
 
+    if (isInside) {
+        setWindowTitle("Inside");
+    } else if (isInVertex) {
+        setWindowTitle("Vertex");
+    } else if (isOnEdge) {
+        setWindowTitle("Edge");
+    } else setWindowTitle("Outside");
+}
 
 void MainForm::on_actionWinding_Number_triggered()
 {
@@ -65,51 +77,54 @@ void MainForm::on_actionWinding_Number_triggered()
     QPointF q = ui->Canvas->getQ();
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
 
+    ui->Canvas->clearHighlighted();
+    QVector<int> indices;
     short res = 0;
-    int highlightedIndex = -1;
+
+    bool isInside = false;
+    bool isInVertex = false;
+    bool isOnEdge = false;
 
     for (int i = 0; i < polygons.size(); ++i) {
         if (algorithms::isPointInMinMaxBoxOfPolygon(q, polygons[i])) {
             res = algorithms::WindingNumber(q, polygons[i]);
-            if (res == 1 || res == -2 || res == -3) {
-                highlightedIndex = i;
-                break;
+
+            if (res == 1) {
+                indices.push_back(i);
+                isInside = true;
+            } else if (res == -2) {
+                indices.push_back(i);
+                isInVertex = true;
+            } else if (res == -1) {
+                isOnEdge = true;
+                indices.push_back(i);
             }
+
         }
     }
 
+    ui->Canvas->highlightPolygon(indices);
 
-    //show results
-    if (highlightedIndex != -1) {
-        if (res == 1) setWindowTitle("Inside");
-        else if (res == -2) setWindowTitle("Vertex");
-        else if (res == -3) setWindowTitle("Edges");
-        ui->Canvas->highlightPolygon(highlightedIndex);
-    } else {
-        setWindowTitle("Outside");
-    }
-
+    if (isInside) {
+        setWindowTitle("Inside");
+    } else if (isInVertex) {
+        setWindowTitle("Vertex");
+    } else if (isOnEdge) {
+        setWindowTitle("Edge");
+    } else setWindowTitle("Outside");
 }
 
-
-
-void MainForm::on_actionOpen_triggered(){
-
+void MainForm::on_actionOpen_triggered()
+{
     //input polygons from txt
     ui->Canvas->openFile();
-
 }
-
-
 
 void MainForm::on_actionOpen_SHP_triggered()
 {
     //load shp with gdal
     ui->Canvas->openSHP();
 }
-
-
-
 
 void MainForm::on_actionExit_triggered()
 {
@@ -125,7 +140,6 @@ void MainForm::on_actionClear_data_triggered()
 void MainForm::on_actionClear_all_triggered()
 {
     ui->Canvas->clear();
-
     repaint();
 }
 

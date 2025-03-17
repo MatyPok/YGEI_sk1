@@ -14,6 +14,7 @@ public:
     static QPolygonF normalizePolygon(const QPolygonF &pol, double canvasWidth, double canvasHeight);
     static QPointF calculateCentroid(const QVector<QPolygonF>& polygons);
     static void normalizePolygons(QVector<QPolygonF>& polygons, int width, int height);
+    static bool isPointOnEdge(const QPointF &q, const QPolygonF &pol);
 };
 
 #endif // ALGORITHMS_H

@@ -20,7 +20,6 @@ private:
     QPolygonF pol;
 
     QVector<QPolygonF> polygons;
-    int highlightedIndex = -1;
 
     bool add_point;
     bool isShapefileLoaded;
@@ -42,6 +41,10 @@ public:
     void openSHP();
 
     void clear();
+
+    QVector<int> highlightedIndex = {};
+    void highlightPolygon(const QVector<int>& indices);
+    void clearHighlighted();
 
 signals:
 };

@@ -8,6 +8,18 @@ short algorithms::analyzePointndPolPosition(const QPointF &q, const QPolygonF &p
         int k = 0; // NUMBER OF INTERSECTIONS
         int n = pol.size(); // NUMBER OF POLYGON EDGES
 
+        // check if point is on edge
+        if (isPointOnEdge(q, pol)){
+            return -1;
+        }
+
+        // check if point is at vertex
+        for (int i=0; i<n; ++i){
+            if (q==pol[i]){
+                return -2;
+            }
+        }
+
         // LOOP THROUGH EACH EDGE OF THE POLYGON
         for (int i = 0; i < n; i++) {
 
@@ -28,7 +40,11 @@ short algorithms::analyzePointndPolPosition(const QPointF &q, const QPolygonF &p
             }
         }
 
-        if (k % 2 == 1) return 1;            // IF THE NUMBER OF INTERSECTIONS IS ODD, THE POINT IS INSIDE
+        if (k % 2 == 1) {
+            return 1;// IF THE NUMBER OF INTERSECTIONS IS ODD, THE POINT IS INSIDE
+        } else {
+            return 0;
+        }
 }
 
 
@@ -57,7 +73,7 @@ double determinant2x2(double a, double b, double c, double d) {
 }
 
 // FUNCTION TO CHECK IF POINT IS ON THE EDGE OF THE POLYGON
-bool isPointOnEdge(const QPointF &q, const QPolygonF &pol) {
+bool algorithms::isPointOnEdge(const QPointF &q, const QPolygonF &pol) {
     int n = pol.size();
     const double eps = 1e-6; // SMALL TOLERANCE FOR CROSS PRODUCT
 
@@ -98,7 +114,7 @@ int algorithms::WindingNumber(const QPointF &q, const QPolygonF &pol) {
 
     // CHECK IF THE POINT IS ON ANY EDGE
     if (isPointOnEdge(q, pol)) {
-        return -3; // POINT IS ON THE EDGE
+        return -1; // POINT IS ON THE EDGE
     }
 
     // LOOP THROUGH EACH EDGE OF THE POLYGON
@@ -206,7 +222,6 @@ QPointF algorithms::calculateCentroid(const QVector<QPolygonF>& polygons)
         return QPointF(0, 0); // return (0,0) if there is no such a point
     }
 
-    // Vraťte průměrné těžiště
     return QPointF(totalX / pointCount, totalY / pointCount);
 }
 

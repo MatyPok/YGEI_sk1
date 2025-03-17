@@ -78,16 +78,19 @@ void Draw::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::GlobalColor::red);
     painter.setBrush(Qt::GlobalColor::yellow);
     for (int i = 0; i < polygons.size(); i++) {
-        if (i != highlightedIndex) {
-            painter.drawPolygon(polygons[i]); // Draw all except the highlighted polygon
+        if (!highlightedIndex.contains(i)) {  // draw only unhighlightened polygons
+            painter.drawPolygon(polygons[i]);
         }
     }
 
-    // Draw the highlighted polygon (if any)
-    if (highlightedIndex >= 0 && highlightedIndex < polygons.size()) {
-        painter.setPen(Qt::GlobalColor::red);
-        painter.setBrush(Qt::GlobalColor::green);
-        painter.drawPolygon(polygons[highlightedIndex]);
+
+    painter.setPen(Qt::GlobalColor::red);
+    painter.setBrush(Qt::GlobalColor::green);
+    for (int ind : highlightedIndex){
+        // Draw the highlighted polygon (if any)
+        if (ind >= 0 && ind < polygons.size()) {
+            painter.drawPolygon(polygons[ind]);
+        }
     }
 
     // Draw point q
@@ -106,20 +109,17 @@ void Draw::switch_source()
 }
 
 
-
-
-void Draw::highlightPolygon(int index)
+void Draw::highlightPolygon(const QVector<int>& indices)
 {
-    // Check if index is valid
-    if (index < 0 || index >= polygons.size()) {
-        qDebug() << "Invalid polygon index!";
-        return;
-    }
-
-    highlightedIndex = index;  // Set the highlighted polygon index
-    repaint();  // Repaint the widget to show the highlighted polygon
+    highlightedIndex = indices;  // Uložení seznamu zvýrazněných polygonů
+    repaint();  // Překreslení obrazovky
 }
 
+void Draw::clearHighlighted()
+{
+    highlightedIndex.clear();
+    repaint();
+}
 
 
 

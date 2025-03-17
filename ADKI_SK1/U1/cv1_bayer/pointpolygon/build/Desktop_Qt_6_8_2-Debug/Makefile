@@ -2671,31 +2671,6 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtabwidget.h \
 		ui_mainform.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVariant \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QAction \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QApplication \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qapplication.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QHBoxLayout \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qboxlayout.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qlayout.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qlayoutitem.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qgridlayout.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QMenu \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qmenu.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QMenuBar \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qmenubar.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QStatusBar \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qstatusbar.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QToolBar \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qtoolbar.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QWidget \
-		../../draw.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVector \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QPolygonF \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QFile \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
 		../../algorithms.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QtGui \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/QtGuiDepends \
@@ -2744,6 +2719,8 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qcryptographichash.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdir.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdirlisting.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfiledevice.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfile.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qfileinfo.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qtimezone.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qdiriterator.h \
@@ -2817,10 +2794,12 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qurlquery.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvarianthash.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QHash \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QVariant \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QString \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantlist.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvariantmap.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QMap \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qvector.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qwaitcondition.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/QDeadlineTimer \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtCore/qwineventnotifier.h \
@@ -2908,7 +2887,9 @@ mainform.o: ../../mainform.cpp ../../mainform.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qtguiversion.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qundogroup.h \
 		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qundostack.h \
-		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qvalidator.h
+		/home/poky/Qt/6.8.2/gcc_64/include/QtGui/qvalidator.h \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/QApplication \
+		/home/poky/Qt/6.8.2/gcc_64/include/QtWidgets/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainform.o ../../mainform.cpp
 
 qrc_images.o: qrc_images.cpp 
