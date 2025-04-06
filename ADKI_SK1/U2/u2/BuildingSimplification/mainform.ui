@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1279</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -34,6 +34,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionOpen_SHP"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -44,6 +45,7 @@
     <addaction name="actionMBR"/>
     <addaction name="actionPCA"/>
     <addaction name="actionLE"/>
+    <addaction name="actionWE"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -70,10 +72,12 @@
    </attribute>
    <addaction name="actionOpen"/>
    <addaction name="separator"/>
+   <addaction name="actionOpen_SHP"/>
    <addaction name="actionMBR"/>
    <addaction name="actionPCA"/>
    <addaction name="actionLE"/>
    <addaction name="separator"/>
+   <addaction name="actionWE"/>
    <addaction name="actionClear_results"/>
    <addaction name="actionClear_All"/>
    <addaction name="separator"/>
@@ -85,7 +89,7 @@
      <normaloff>:/images/icons/open_file.png</normaloff>:/images/icons/open_file.png</iconset>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string> Open TextFile</string>
    </property>
    <property name="toolTip">
     <string>Open file</string>
@@ -158,6 +162,16 @@
    </property>
    <property name="toolTip">
     <string>Longest Edge</string>
+   </property>
+  </action>
+  <action name="actionOpen_SHP">
+   <property name="text">
+    <string>Open SHP</string>
+   </property>
+  </action>
+  <action name="actionWE">
+   <property name="text">
+    <string>WE</string>
    </property>
   </action>
  </widget>
