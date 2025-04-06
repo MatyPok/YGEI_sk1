@@ -20,6 +20,12 @@ public:
     static QPolygonF createERPCA(const QPolygonF &pol);
     static QPolygonF createLongesEdge(const QPolygonF &pol);
     static double getDistance(const QPointF &p1, const QPointF &p2);
+    static QPolygonF createWE(const QPolygonF &pol);
+
+    // u1
+
+    static void normalizePolygons(QVector<QPolygonF>& polygons, int width, int height);
+    static QPointF calculateCentroid(const QVector<QPolygonF>& polygons);
 
 
 

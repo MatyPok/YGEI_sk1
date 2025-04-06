@@ -17,15 +17,22 @@ public:
 
 private slots:
     void on_actionOpen_triggered();
+    void on_actionOpen_SHP_triggered();
+    void on_actionExit_triggered();
 
     void on_actionMBR_triggered();
-
     void on_actionPCA_triggered();
-
     void on_actionLE_triggered();
+     void on_actionWE_triggered();
+
+    // U1
+    void on_actionClear_results_triggered();
+    void on_actionClear_All_triggered();
 
 private:
     Ui::MainForm *ui;
 };
 
 #endif // MAINFORM_H
+
+

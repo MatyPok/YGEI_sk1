@@ -2,6 +2,14 @@
 #include "ui_mainform.h"
 #include "algorithms.h"
 
+// U1
+#include "gdal_priv.h"
+
+#include "QApplication"
+
+#include <iostream>
+
+
 MainForm::MainForm(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainForm)
@@ -17,25 +25,34 @@ MainForm::~MainForm()
 
 void MainForm::on_actionOpen_triggered()
 {
+    // U1
+    //input polygons from txt
+    ui->Canvas->openFile();
+}
 
+void MainForm::on_actionExit_triggered()
+{
+    QApplication::quit();
 }
 
 
 void MainForm::on_actionMBR_triggered()
 {
     //create minimum bounding rectangle
-
-    //get data
-    QPolygonF building = ui->Canvas->getBuilding();
+    QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
+    QVector<QPolygonF> maer;
 
     // run function
-    //QPolygonF ch = Algorithms::createCH(building);
-    QPolygonF maer = Algorithms::createMAER(building);
+    for (int i = 0; i < polygons.size(); ++i) {
 
+        if (maer.isEmpty()) {
+            maer.append(QPolygonF());
+        }
+        maer.append(Algorithms::createMAER(polygons[i]));
+
+    }
     //set results
-    //ui->Canvas->setCH(ch);
     ui->Canvas->setMAER(maer);
-
     //repaint
     repaint();
 }
@@ -46,14 +63,20 @@ void MainForm::on_actionPCA_triggered()
     //create minimum bounding rectangle
 
     //get data
-    QPolygonF building = ui->Canvas->getBuilding();
+    QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
+    QVector<QPolygonF> erpca;
+
 
     // run function
-    //QPolygonF ch = Algorithms::createCH(building);
-    QPolygonF erpca = Algorithms::createERPCA(building);
+    for (int i = 0; i < polygons.size(); ++i) {
 
+        if (erpca.isEmpty()) {
+            erpca.append(QPolygonF());
+        }
+        erpca.append(Algorithms::createERPCA(polygons[i]));
+
+    }
     //set results
-    //ui->Canvas->setCH(ch);
     ui->Canvas->setERPCA(erpca);
 
     //repaint
@@ -65,16 +88,72 @@ void MainForm::on_actionPCA_triggered()
 void MainForm::on_actionLE_triggered()
 {
     //get data
-    QPolygonF building = ui->Canvas->getBuilding();
+    QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
+    QVector<QPolygonF> le;
+
 
     //run function
-    QPolygonF le = Algorithms::createLongesEdge(building);
+    for (int i = 0; i < polygons.size(); ++i) {
 
-    //ui->Canvas->setCH(ch);
+        if (le.isEmpty()) {
+            le.append(QPolygonF());
+        }
+        le.append(Algorithms::createLongesEdge(polygons[i]));
+
+    }
     ui->Canvas->setLE(le);
 
     //repaint
     repaint();
 
+}
+
+
+
+void MainForm::on_actionWE_triggered()
+{
+    //get data
+    QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
+    QVector<QPolygonF> we;
+
+    // run function
+    for (int i = 0; i < polygons.size(); ++i) {
+
+        if (we.isEmpty()) {
+            we.append(QPolygonF());
+        }
+        we.append(Algorithms::createWE(polygons[i]));
+
+    }
+
+    //set results
+    //ui->Canvas->setCH(ch);
+    ui->Canvas->setWE(we);
+
+    //repaint
+    repaint();
+}
+
+// U1
+
+
+void MainForm::on_actionOpen_SHP_triggered()
+{
+    //load shp with gdal
+    ui->Canvas->openSHP();
+}
+
+
+void MainForm::on_actionClear_results_triggered()
+{
+    ui->Canvas->clearResults();
+    repaint();
+}
+
+
+void MainForm::on_actionClear_All_triggered()
+{
+    ui->Canvas->clear();
+    repaint();
 }
 

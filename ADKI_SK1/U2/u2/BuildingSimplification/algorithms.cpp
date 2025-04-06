@@ -6,6 +6,50 @@
 
 Algorithms::Algorithms() {}
 
+// U1
+
+void Algorithms::normalizePolygons(QVector<QPolygonF>& polygons, int width, int height)
+{
+    // center of mass of all polygons
+    QPointF centroid = calculateCentroid(polygons);
+
+    // move all polygons so they are at the center of window
+    qreal offsetX = width / 2 - centroid.x();
+    qreal offsetY = height / 2 - centroid.y();
+
+    for (QPolygonF& polygon : polygons) {
+        for (QPointF& point : polygon) {
+            point.setX(point.x() + offsetX);
+            point.setY(height - (point.y() + offsetY));
+        }
+    }
+}
+
+// U1
+QPointF Algorithms::calculateCentroid(const QVector<QPolygonF>& polygons)
+{
+    qreal totalX = 0;
+    qreal totalY = 0;
+    int pointCount = 0;
+
+    for (const QPolygonF& polygon : polygons) {
+        for (const QPointF& point : polygon) {
+            totalX += point.x();
+            totalY += point.y();
+            pointCount++;
+        }
+    }
+
+    if (pointCount == 0) {
+        return QPointF(0, 0); // return (0,0) if there is no such a point
+    }
+
+    return QPointF(totalX / pointCount, totalY / pointCount);
+}
+
+
+
+
 double Algorithms::get2LinesAngle(const QPointF &p1, const QPointF &p2, const QPointF &p3, const QPointF &p4)
 {
     //Compute angle between two lines
@@ -368,7 +412,65 @@ QPolygonF Algorithms::createLongesEdge(const QPolygonF &pol){
 
 
 
+QPolygonF Algorithms::createWE(const QPolygonF &pol){
+    // INICIALIZACE
+    int n = pol.size();
+    double d1max = 0;
+    double d2max = 0;
+    double dx1 = 0;
+    double dy1 = 0;
+    double dx2 = 0;
+    double dy2 = 0;
 
+
+    // nalezeni dvou nejdelsich diagonal
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (i == j) continue;
+            //Compute 2D distance
+            QPointF p1 = pol[(i + j + 2) % n];
+            QPointF p2 = pol[i % n];
+
+            double dx = p1.x() - p2.x();
+            double dy = p1.y() - p2.y();
+
+            double d = sqrt(dx*dx1 + dy*dy);
+
+            if (d > d1max){
+                d2max = d1max;
+                d1max = d;
+                dx1 = dx;
+                dy1 = dy;
+                dx2 = dx1;
+                dy2 = dy1;
+
+
+            }else if (d > d2max && d < d1max){
+                d2max = d;
+                dx2 = dx;
+                dy2 = dy;
+            }
+        }
+    }
+
+    //SMERNICE
+    double sigma1 = atan2(dx1, dy1);
+    double sigma2 = atan2(dx2, dy2);
+    double sigma = (d1max*sigma1 + d2max*sigma2)/(d1max + d2max);
+
+
+    //rotation by -sigma
+    QPolygonF pol_rot = rotate(pol, -sigma);
+
+    //compute min max box
+    auto [mmbox, area] = minmaxBox(pol_rot);
+
+    // resize minmaxbox
+    QPolygonF mmbox_res = resize(pol, mmbox);
+
+    // rotate minmaxbox
+    return rotate(mmbox_res, sigma);
+}
 
 
 
