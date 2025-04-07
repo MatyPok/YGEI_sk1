@@ -74,61 +74,61 @@ QPolygonF Algorithms::createCH(const QPolygonF &pol)
 {
     QPolygonF ch;
 
-    // check polygon size
+    // Check polygon size
     if (pol.size() < 3) {
         qWarning() << "Input polygon has too few points!";
-        return ch; // return empty polygon if it is not a polygon 
+        return ch; // Returns an empty polygon
     }
 
-    // Get pivot q
+    // Get pivot point q (point with the smallest y-coordinate)
     auto q = *std::min_element(pol.begin(), pol.end(), sortPointsByY());
 
-    // Get point r
+    // Get point r (point with the smallest x-coordinate)
     auto r = *std::min_element(pol.begin(), pol.end(), sortPointsByX());
 
-    // Initialize pj, pj1
+    // Initialize points pj and pj1
     QPointF pj = q;
     QPointF pj1(r.x(), q.y());
 
-    // first point in CH
+    // Add the first point to the convex hull
     ch.push_back(pj);
 
-    // find all points of CH
+    // Find all points of the convex hull
     do {
-        // Maximum a index
+        // Maximum angle and index of the point
         double omega_max = 0;
         int i_max = -1;
 
-        // find point generating max angle
+        // Find the point generating the maximum angle
         for (int i = 0; i < pol.size(); i++) {
             double omega = get2LinesAngle(pj, pj1, pj, pol[i]);
 
-            // if angle > omega, actualize
+            // If the angle is greater than omega_max, update
             if (omega > omega_max) {
                 omega_max = omega;
                 i_max = i;
             }
         }
 
-        // if no point found, stop
+        // If no point was found (for invalid polygons), stop
         if (i_max == -1) {
             qWarning() << "Error: Could not compute convex hull. No valid points found.";
             break;
         }
 
-        // add point to CH
+        // Add the point to the convex hull
         ch.push_back(pol[i_max]);
 
-        // actualize 
+        // Update the vertices
         pj1 = pj;
         pj = pol[i_max];
 
     } while (pj != q);
-    
-    // Check: If CH has less than 3 points, return empty polygon
+
+    // Check: If the convex hull has less than 3 points, return an empty polygon
     if (ch.size() < 3) {
         qWarning() << "Convex hull has less than 3 points!";
-        return QPolygonF();
+        return QPolygonF(); // Empty polygon indicates an issue
     }
 
     return ch;
@@ -143,10 +143,10 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
     // CONVEX HULL - GRAHAM SCAN
     QPolygonF ch_g;
 
-    // get pivot with minimal Y
+    // Get pivot point q (point with the smallest y-coordinate)
     auto q = *std::min_element(pol.begin(), pol.end(), sortPointsByY());
 
-    // create new polygon, which doesn't contain q
+    // Create a new polygon excluding the pivot point q
     QPolygonF new_pol;
     for (const auto &pt : pol) {
         if (pt != q) new_pol.append(pt);
@@ -156,13 +156,13 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
         return QPolygonF();
     }
 
-    // Structure for saving point and angle 
+    // Structure to store point and its angle relative to the pivot
     struct PointAngle {
         QPointF point;
         double angle;
     };
 
-    // count angles between points and pivot
+    // Calculate angles relative to the pivot
     QVector<PointAngle> points_with_angles;
     for (int i = 0; i < new_pol.size(); ++i) {
         double dx = new_pol[i].x() - q.x();
@@ -176,23 +176,25 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
         points_with_angles.append(pa);
     }
 
+    // Sort points by their angle relative to the pivot
     std::sort(points_with_angles.begin(), points_with_angles.end(), [](const PointAngle &a, const PointAngle &b) {
         return a.angle < b.angle;
     });
 
-    // reconstruction of polygon from points
+    // Rebuild the polygon from points sorted by angle
     new_pol.clear();
     for (const auto &pt : points_with_angles) {
         new_pol.append(pt.point);
     }
 
-    // add pivot to CH
+    // Add the pivot point to the convex hull
     ch_g.push_back(q);
 
-    // add first two points
+    // Add the first two points
     ch_g.push_back(new_pol[0]);
     ch_g.push_back(new_pol[1]);
 
+    // Process remaining points and build the convex hull
     for (int j = 2; j < new_pol.size(); ++j) {
         QPointF pj = new_pol[j];
 
@@ -203,8 +205,8 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
             double orientation = (pt.x() - pt_1.x()) * (pj.y() - pt_1.y()) -
                                  (pt.y() - pt_1.y()) * (pj.x() - pt_1.x());
 
-            if (orientation > 0) break; // CCW - right direction
-            ch_g.pop_back();            // CW - delete
+            if (orientation > 0) break; // Left turn - correct direction
+            ch_g.pop_back();            // Right turn or collinear - remove point
         }
 
         ch_g.push_back(pj);
@@ -212,6 +214,7 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
 
     return ch_g;
 }
+
 
 
 std::tuple<QPolygonF, double> Algorithms::minmaxBox(const QPolygonF &pol)
@@ -353,55 +356,55 @@ QPolygonF Algorithms::resize(const QPolygonF &pol, const QPolygonF &mmbox){
 
 QPolygonF Algorithms::createMAER(const QPolygonF &pol){
 
-    //create niminum enclosing rectangle over the building
-    double sigma_min = 2*M_PI;
-    //compute minimum area enclosing rectangle
+    // Create minimum enclosing rectangle over the building
+    double sigma_min = 2 * M_PI;
+    // Compute the minimum area enclosing rectangle
     auto [mmbox_min, area_min] = minmaxBox(pol);
 
-    //create CH
+    // Create the convex hull (CH) of the input polygon
     QPolygonF ch = createCH(pol);
 
-    //process all segments of cgint
+    // Process all segments of the convex hull (CH)
     int n = ch.size();
 
+    // If the convex hull has too few points, return an empty polygon
     if (ch.size() < 2) {
         qWarning() << "Convex hull has too few points!";
-        return QPolygonF(); // nebo vhodná výchozí hodnota
+        return QPolygonF(); // or an appropriate default value
     }
 
+    // Iterate over all edges (segments) of the convex hull
     for (int i = 0; i < n; ++i) {
-        //get ch segment and ints differencies
-        double dx = ch[(i+1)%n].x() - ch[i].x();
-        double dy = ch[(i+1)%n].y() - ch[i].y();
+        // Get the current segment of the convex hull and calculate its differences
+        double dx = ch[(i + 1) % n].x() - ch[i].x();
+        double dy = ch[(i + 1) % n].y() - ch[i].y();
 
-        //get angle of rotation
+        // Calculate the angle of rotation for the current segment
         double sigma = atan2(dy, dx);
 
-        //rotation by -sigma
+        // Rotate the convex hull by -sigma to align the segment horizontally
         QPolygonF ch_rotate = rotate(ch, -sigma);
 
-        //compute min max box
+        // Compute the minimum bounding box for the rotated convex hull
         auto [mmbox, area] = minmaxBox(ch_rotate);
 
-        //rotate backj - nemusim protoze mam nakopirovanou tu vstupni hodnotu.
+        // No need to rotate back since we copied the original value already
 
-        //update minimum
-        if(area<area_min){
+        // Update the minimum area if a smaller area is found
+        if (area < area_min) {
             area_min = area;
             sigma_min = sigma;
             mmbox_min = mmbox;
-
         }
     }
 
-    // resize minmaxbox
+    // Resize the minimum bounding box to fit the original polygon
     QPolygonF mmbox_min_res = resize(pol, mmbox_min);
 
-    // rotate minmaxbox
+    // Rotate the resized minimum bounding box to its optimal orientation
     return rotate(mmbox_min_res, sigma_min);
-
-
 }
+
 
 // ENCLOSING RECTANGLE USING PCA
 QPolygonF Algorithms::createERPCA(const QPolygonF &pol){
@@ -468,87 +471,83 @@ double Algorithms::getDistance(const QPointF &p1, const QPointF &p2){
 }
 
 
-QPolygonF Algorithms::createLongesEdge(const QPolygonF &pol){
+QPolygonF Algorithms::createLongesEdge(const QPolygonF &pol) {
 
-    //INICIALIZACE
-    double max_d = 0;
-    int max_index = -1;
-    double max_dx = 0;
-    double max_dy = 0;
+    // INITIALIZATION
+    double max_d = 0; // maximum distance
+    int max_index = -1; // index of the longest edge
+    double max_dx = 0; // x component of the longest edge
+    double max_dy = 0; // y component of the longest edge
 
-
+    // Iterate through all the edges to find the longest one
     for (int i = 0; i < pol.size(); i++) {
         QPointF p1 = pol[i];
-        QPointF p2 = pol[(i + 1) % pol.count()]; // Další bod (pro poslední bod je to opět první bod)
+        QPointF p2 = pol[(i + 1) % pol.count()]; // Next point (for the last point, it's the first point)
 
-        //Compute 2D distance
+        // Compute 2D distance
         double dx = p1.x() - p2.x();
         double dy = p1.y() - p2.y();
 
-        double d = sqrt(dx*dx + dy*dy);
+        double d = sqrt(dx * dx + dy * dy); // Distance formula
 
-        if ( d > max_d){
+        // Update the maximum distance and its components if the current distance is greater
+        if (d > max_d) {
             max_d = d;
             max_index = i;
             max_dx = dx;
-            max_dy =dy;
+            max_dy = dy;
         }
-
     }
 
-    //VYPOCET HLAVNI SMERNICE
-    double sigma = atan2(max_dy, max_dx);
+    // COMPUTE THE MAIN DIRECTION
+    double sigma = atan2(max_dy, max_dx); // Compute the direction of the longest edge
 
-    //rotation by -sigma
+    // Rotate by -sigma to align the edge with the x-axis
     QPolygonF pol_rot = rotate(pol, -sigma);
 
-    //compute min max box
+    // Compute the minimal bounding box
     auto [mmbox, area] = minmaxBox(pol_rot);
 
-    // resize minmaxbox
+    // Resize the minimal bounding box to match the original polygon's size
     QPolygonF mmbox_res = resize(pol, mmbox);
 
-    // rotate minmaxbox
+    // Rotate the bounding box back by sigma to the original orientation
     return rotate(mmbox_res, sigma);
-
 }
 
-
-
-QPolygonF Algorithms::createWE(const QPolygonF &pol){
-    // INICIALIZACE
+QPolygonF Algorithms::createWE(const QPolygonF &pol) {
+    // INITIALIZATION
     int n = pol.size();
-    double d1max = 0;
-    double d2max = 0;
-    double dx1 = 0;
-    double dy1 = 0;
-    double dx2 = 0;
-    double dy2 = 0;
+    double d1max = 0; // longest diagonal
+    double d2max = 0; // second longest diagonal
+    double dx1 = 0; // x component of the first diagonal
+    double dy1 = 0; // y component of the first diagonal
+    double dx2 = 0; // x component of the second diagonal
+    double dy2 = 0; // y component of the second diagonal
 
-
-    // nalezeni dvou nejdelsich diagonal
+    // Find the two longest diagonals
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            if (i == j) continue;
-            //Compute 2D distance
+            if (i == j) continue; // Skip the same points
+
+            // Compute 2D distance between the two points
             QPointF p1 = pol[(i + j + 2) % n];
             QPointF p2 = pol[i % n];
 
             double dx = p1.x() - p2.x();
             double dy = p1.y() - p2.y();
 
-            double d = sqrt(dx*dx1 + dy*dy);
+            double d = sqrt(dx * dx + dy * dy); // Distance formula
 
-            if (d > d1max){
+            // Update the maximum diagonals
+            if (d > d1max) {
                 d2max = d1max;
                 d1max = d;
                 dx1 = dx;
                 dy1 = dy;
                 dx2 = dx1;
                 dy2 = dy1;
-
-
-            }else if (d > d2max && d < d1max){
+            } else if (d > d2max && d < d1max) {
                 d2max = d;
                 dx2 = dx;
                 dy2 = dy;
@@ -556,75 +555,73 @@ QPolygonF Algorithms::createWE(const QPolygonF &pol){
         }
     }
 
-    //SMERNICE
-    double sigma1 = atan2(dx1, dy1);
-    double sigma2 = atan2(dx2, dy2);
-    double sigma = (d1max*sigma1 + d2max*sigma2)/(d1max + d2max);
+    // Compute the directions of the diagonals
+    double sigma1 = atan2(dx1, dy1); // direction of the first diagonal
+    double sigma2 = atan2(dx2, dy2); // direction of the second diagonal
+    double sigma = (d1max * sigma1 + d2max * sigma2) / (d1max + d2max); // Weighted average direction
 
-
-    //rotation by -sigma
+    // Rotate by -sigma to align the diagonals
     QPolygonF pol_rot = rotate(pol, -sigma);
 
-    //compute min max box
+    // Compute the minimal bounding box
     auto [mmbox, area] = minmaxBox(pol_rot);
 
-    // resize minmaxbox
+    // Resize the minimal bounding box
     QPolygonF mmbox_res = resize(pol, mmbox);
 
-    // rotate minmaxbox
+    // Rotate the bounding box back by sigma to the original orientation
     return rotate(mmbox_res, sigma);
 }
 
-QPolygonF Algorithms::createWA(const QPolygonF &pol){
+QPolygonF Algorithms::createWA(const QPolygonF &pol) {
     int n = pol.size();
-    std::vector<double> sigmas;   // směry hran
-    std::vector<double> lengths;  // délky hran
+    std::vector<double> sigmas;   // Directions of the edges
+    std::vector<double> lengths;  // Lengths of the edges
 
-    // Spočítáme směry a délky všech hran
+    // Compute the directions and lengths of all edges
     for (int i = 0; i < n; ++i) {
         QPointF p1 = pol[i];
         QPointF p2 = pol[(i + 1) % n];
         double dx = p2.x() - p1.x();
         double dy = p2.y() - p1.y();
 
-        double sigma = atan2(dy, dx);  // směr hrany
-        double length = std::sqrt(dx*dx + dy*dy);  // délka hrany
+        double sigma = atan2(dy, dx);  // Direction of the edge
+        double length = std::sqrt(dx * dx + dy * dy);  // Length of the edge
 
         sigmas.push_back(sigma);
         lengths.push_back(length);
     }
 
-    // Zvolíme referenční směr sigma'
-    double sigma_ref = sigmas[0]; // zkusíme první hranu jako výchozí směr
+    // Choose a reference direction sigma' (we will try the first edge as the reference)
+    double sigma_ref = sigmas[0];
 
-    // Krok 3: Spočítáme r_i a vážený průměr
+    // Step 3: Compute r_i and weighted average
     double sum_r_s = 0.0;
     double sum_s = 0.0;
 
     for (int i = 0; i < n; ++i) {
         double delta_sigma = sigmas[i] - sigma_ref;
 
-        // Normalizace směru do rozsahu (-PI, PI)
-        while (delta_sigma <= -M_PI) delta_sigma += 2*M_PI;
-        while (delta_sigma > M_PI) delta_sigma -= 2*M_PI;
+        // Normalize the direction to the range (-PI, PI)
+        while (delta_sigma <= -M_PI) delta_sigma += 2 * M_PI;
+        while (delta_sigma > M_PI) delta_sigma -= 2 * M_PI;
 
-        // Výpočet k_i a r_i
-        int k_i = round((2.0 * delta_sigma) / M_PI); // zaokrouhlený podíl
+        // Compute k_i and r_i
+        int k_i = round((2.0 * delta_sigma) / M_PI); // Rounded quotient
         double r_i = delta_sigma - k_i * (M_PI / 2.0);
 
         sum_r_s += r_i * lengths[i];
         sum_s += lengths[i];
     }
 
-    double sigma = sigma_ref + (sum_r_s / sum_s);
+    double sigma = sigma_ref + (sum_r_s / sum_s); // Final direction
 
-    // Krok 4: Rotace, bounding box, resize, zpětná rotace
+    // Step 4: Rotate, compute bounding box, resize, and rotate back
     QPolygonF pol_rot = rotate(pol, -sigma);
     auto [mmbox, area] = minmaxBox(pol_rot);
     QPolygonF mmbox_res = resize(pol, mmbox);
     return rotate(mmbox_res, sigma);
 }
-
 
 
 
