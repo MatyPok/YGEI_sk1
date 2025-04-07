@@ -1,7 +1,6 @@
 #include "draw.h"
 #include <QtGui>
 
-// z U1
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
@@ -17,24 +16,7 @@ using namespace std;
 #include <ogrsf_frmts.h>
 #include "algorithms.h"
 
-//přidávám zatím všechno co máme navíc v U1 a může se hodit
 
-
-/*
-void Draw::setPol(const QPolygonF &newPol)
-{
-    pol = newPol;
-}
-*/
-/*
-Draw::Draw(QWidget *parent)
-    : QWidget{parent}
-{
-
-}
-*/
-
-// U1
 Draw::Draw(QWidget *parent)
     : QWidget{parent}
 {
@@ -44,26 +26,7 @@ Draw::Draw(QWidget *parent)
 
 }
 
-/*
-void Draw::mousePressEvent(QMouseEvent *e)
-{
-    //Get x, y coordinates
-    double x = e->pos().x();
-    double y = e->pos().y();
 
-    //create point
-    QPointF p(x, y);
-
-    //Add point to polygon
-    building.push_back(p);
-
-
-    //Repaint screen
-    repaint();
-}
-*/
-
-// U1
 void Draw::mousePressEvent(QMouseEvent *e)
 {
 
@@ -142,9 +105,8 @@ void Draw::paintEvent(QPaintEvent *event)
 
 
     //Set graphic for WE
-    // Nastavení barvy pera na oranžovou
     QPen penWE;
-    penWE.setColor(QColor(255, 165, 0));  // RGB hodnoty pro oranžovou
+    penWE.setColor(QColor(255, 165, 0));  // orange
     painter.setPen(penWE);
     painter.setBrush(Qt::GlobalColor::transparent);
     //Draw building
@@ -153,10 +115,6 @@ void Draw::paintEvent(QPaintEvent *event)
     }
 
     //Set graphic for WA
-    // Nastavení barvy pera na oranžovou
-    //QPen penWA;
-    //penWA.setColor(QColor(255, 50, 0));  // RGB hodnoty pro oranžovou
-    //painter.setPen(penWA);
     painter.setPen(Qt::GlobalColor::yellow);
     painter.setBrush(Qt::GlobalColor::transparent);
     //Draw building
