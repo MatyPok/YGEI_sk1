@@ -74,10 +74,10 @@ QPolygonF Algorithms::createCH(const QPolygonF &pol)
 {
     QPolygonF ch;
 
-    // Kontrola velikosti polygonu
+    // check polygon size
     if (pol.size() < 3) {
         qWarning() << "Input polygon has too few points!";
-        return ch; // Vrátí prázdný polygon
+        return ch; // return empty polygon if it is not a polygon 
     }
 
     // Get pivot q
@@ -86,49 +86,49 @@ QPolygonF Algorithms::createCH(const QPolygonF &pol)
     // Get point r
     auto r = *std::min_element(pol.begin(), pol.end(), sortPointsByX());
 
-    // Inicializace pj, pj1
+    // Initialize pj, pj1
     QPointF pj = q;
     QPointF pj1(r.x(), q.y());
 
-    // Přidej první bod do ch
+    // first point in CH
     ch.push_back(pj);
 
-    // Najdi všechny body konvexní obálky
+    // find all points of CH
     do {
         // Maximum a index
         double omega_max = 0;
         int i_max = -1;
 
-        // Najdi bod generující maximální úhel
+        // find point generating max angle
         for (int i = 0; i < pol.size(); i++) {
             double omega = get2LinesAngle(pj, pj1, pj, pol[i]);
 
-            // Pokud je úhel větší než omega_max, aktualizuj
+            // if angle > omega, actualize
             if (omega > omega_max) {
                 omega_max = omega;
                 i_max = i;
             }
         }
 
-        // Pokud jsme nenašli žádný bod (chybné polygony), skončíme
+        // if no point found, stop
         if (i_max == -1) {
             qWarning() << "Error: Could not compute convex hull. No valid points found.";
             break;
         }
 
-        // Přidej bod do ch
+        // add point to CH
         ch.push_back(pol[i_max]);
 
-        // Aktualizuj vrcholy
+        // actualize 
         pj1 = pj;
         pj = pol[i_max];
 
     } while (pj != q);
-
-    // Kontrola: Pokud obálka nemá alespoň 3 body, vrátíme prázdný polygon
+    
+    // Check: If CH has less than 3 points, return empty polygon
     if (ch.size() < 3) {
         qWarning() << "Convex hull has less than 3 points!";
-        return QPolygonF(); // Prázdný polygon znamená problém
+        return QPolygonF();
     }
 
     return ch;
@@ -140,13 +140,13 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
         return QPolygonF();
     }
 
-    // KONVEXNI OBALKA - GRAHAM SCAN
+    // CONVEX HULL - GRAHAM SCAN
     QPolygonF ch_g;
 
-    // Získání pivotu q (bod s minimální Y souřadnicí)
+    // get pivot with minimal Y
     auto q = *std::min_element(pol.begin(), pol.end(), sortPointsByY());
 
-    // Vytvoření nového polygonu, který neobsahuje bod q
+    // create new polygon, which doesn't contain q
     QPolygonF new_pol;
     for (const auto &pt : pol) {
         if (pt != q) new_pol.append(pt);
@@ -156,13 +156,13 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
         return QPolygonF();
     }
 
-    // Struktura pro ukládání bodu a jeho úhlu vůči pivotu
+    // Structure for saving point and angle 
     struct PointAngle {
         QPointF point;
         double angle;
     };
 
-    // Výpočet úhlů vůči pivotu
+    // count angles between points and pivot
     QVector<PointAngle> points_with_angles;
     for (int i = 0; i < new_pol.size(); ++i) {
         double dx = new_pol[i].x() - q.x();
@@ -180,16 +180,16 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
         return a.angle < b.angle;
     });
 
-    // Rekonstrukce polygonu z bodů podle úhlu
+    // reconstruction of polygon from points
     new_pol.clear();
     for (const auto &pt : points_with_angles) {
         new_pol.append(pt.point);
     }
 
-    // Přidání prvního bodu do obálky (pivot)
+    // add pivot to CH
     ch_g.push_back(q);
 
-    // Přidání prvních dvou bodů
+    // add first two points
     ch_g.push_back(new_pol[0]);
     ch_g.push_back(new_pol[1]);
 
@@ -203,8 +203,8 @@ QPolygonF Algorithms::createCH_Graham(const QPolygonF &pol) {
             double orientation = (pt.x() - pt_1.x()) * (pj.y() - pt_1.y()) -
                                  (pt.y() - pt_1.y()) * (pj.x() - pt_1.x());
 
-            if (orientation > 0) break; // Levotočivá - správný směr
-            ch_g.pop_back();            // Pravotočivá nebo kolineární - odstraň
+            if (orientation > 0) break; // CCW - right direction
+            ch_g.pop_back();            // CW - delete
         }
 
         ch_g.push_back(pj);
