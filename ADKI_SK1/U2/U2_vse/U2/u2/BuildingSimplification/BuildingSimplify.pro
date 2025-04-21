@@ -20,6 +20,7 @@ SOURCES += \
     draw.cpp \
     main.cpp \
     mainform.cpp \
+    open.cpp \
     sortpointsbyx.cpp \
     sortpointsbyy.cpp
 
@@ -27,6 +28,7 @@ HEADERS += \
     algorithms.h \
     draw.h \
     mainform.h \
+    open.h \
     sortpointsbyx.h \
     sortpointsbyy.h
 

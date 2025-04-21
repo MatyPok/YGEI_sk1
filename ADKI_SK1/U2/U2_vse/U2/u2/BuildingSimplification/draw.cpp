@@ -16,6 +16,8 @@ using namespace std;
 #include <ogrsf_frmts.h>
 #include "algorithms.h"
 
+#include "open.h"
+
 
 Draw::Draw(QWidget *parent)
     : QWidget{parent}
@@ -177,113 +179,21 @@ void Draw::clearResults()
 
 
 
-// U1
-void Draw::openFile()
+void Draw::drawPolygonsFromTXT()
 {
-    // Open txt file with polygons
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Text Files (*.txt);;All Files (*)"));
+    if (fileName.isEmpty()) return;
 
-    if (fileName.isEmpty()) {
-        return; // If the user cancels the file selection
-    }
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Error opening file:" << file.errorString();
-        return;
-    }
-
-    QTextStream text(&file);
-    polygons.clear();  // Clear previous polygons
-
-    QVector<QPointF> currentPolygon;  // Temporary container for points of a polygon
-
-    while (!text.atEnd()) {
-        QString line = text.readLine().trimmed();  // Trim white spaces
-
-        if (line.isEmpty()) {
-            if (!currentPolygon.isEmpty()) {
-                polygons.push_back(QPolygonF(currentPolygon));  // Push the polygon to the vector
-                currentPolygon.clear();  // Start a new polygon
-            }
-            continue;
-        }
-
-        QStringList coordinates = line.split(",");
-
-        if (coordinates.size() == 2) {
-            bool okX, okY;
-            double x = coordinates[0].toDouble(&okX);
-            double y = coordinates[1].toDouble(&okY);
-
-            if (okX && okY) {
-                // Add the point to the current polygon
-                currentPolygon.append(QPointF(x, y));
-            }
-        }
-    }
-
-    if (!currentPolygon.isEmpty()) {
-        polygons.push_back(QPolygonF(currentPolygon));  // Add last polygon
-    }
-
-    file.close();
-    repaint();  // Repaint the widget to show the new polygons
-
-    //add_point = true;  // Switch to add points mode
+    polygons = Open::openFile(fileName);
+    repaint();
 }
 
-// U1
-// **Načítání polygonů ze SHP souboru**
-void Draw::openSHP()
+
+void Draw::drawPolygonsFromSHP()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Shape Files (*.shp);;All Files (*)"));
     if (fileName.isEmpty()) return;
 
-    GDALAllRegister();
-    GDALDataset *poDS = (GDALDataset *)GDALOpenEx(fileName.toUtf8().constData(), GDAL_OF_VECTOR, nullptr, nullptr, nullptr);
-    if (!poDS) {
-        qDebug() << "Open failed\n";
-        return;
-    }
-
-    OGRLayer *poLayer = poDS->GetLayer(0);
-    if (!poLayer) {
-        qDebug() << "Error: Shape file doesn't contain any layers!";
-        GDALClose(poDS);
-        return;
-    }
-
-    polygons.clear();
-
-    OGRFeature *poFeature = nullptr;
-    poLayer->ResetReading();
-    while ((poFeature = poLayer->GetNextFeature()) != nullptr) {
-        OGRGeometry *poGeometry = poFeature->GetGeometryRef();
-        if (poGeometry && wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon) {
-            OGRPolygon *poPolygon = dynamic_cast<OGRPolygon *>(poGeometry);
-            if (poPolygon) {
-                QPolygonF qPolygon;
-                OGRLinearRing *poRing = poPolygon->getExteriorRing();
-                if (poRing) {
-                    int numPoints = poRing->getNumPoints();
-                    for (int i = 0; i < numPoints; i++) {
-                        double x = poRing->getX(i);
-                        double y = poRing->getY(i);
-                        qPolygon.append(QPointF(x, y));
-                    }
-                }
-                polygons.append(qPolygon);
-            }
-        }
-        OGRFeature::DestroyFeature(poFeature);
-    }
-
-    GDALClose(poDS);
-
-    Algorithms::normalizePolygons(polygons, width(), height());
-
+    polygons = Open::openSHP(fileName, width(), height());
     repaint();
-
-    //add_point = true;  // Switch to add points mode
 }

@@ -57,8 +57,8 @@ public:
     QPolygonF getPol() const{return pol;}
     QVector<QPolygonF> getPolygons() const{return polygons;}
 
-    void openFile();
-    void openSHP();
+    void drawPolygonsFromTXT();
+    void drawPolygonsFromSHP();
 
     void clear();
     void clearResults();
