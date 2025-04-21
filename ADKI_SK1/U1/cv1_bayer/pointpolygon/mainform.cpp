@@ -117,13 +117,13 @@ void MainForm::on_actionWinding_Number_triggered()
 void MainForm::on_actionOpen_triggered()
 {
     //input polygons from txt
-    ui->Canvas->openFile();
+    ui->Canvas->drawPolygonsFromTXT();
 }
 
 void MainForm::on_actionOpen_SHP_triggered()
 {
     //load shp with gdal
-    ui->Canvas->openSHP();
+    ui->Canvas->drawPolygonsFromSHP();
 }
 
 void MainForm::on_actionExit_triggered()

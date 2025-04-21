@@ -37,8 +37,8 @@ public:
     QVector<QPolygonF> getPolygons() const{return polygons;}
     void clearPolygons();
 
-    void openFile();
-    void openSHP();
+    void drawPolygonsFromTXT();
+    void drawPolygonsFromSHP();
 
     void clear();
 

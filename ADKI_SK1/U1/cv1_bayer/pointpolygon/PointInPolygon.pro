@@ -19,12 +19,14 @@ SOURCES += \
     algorithms.cpp \
     draw.cpp \
     main.cpp \
-    mainform.cpp
+    mainform.cpp \
+    open.cpp
 
 HEADERS += \
     algorithms.h \
     draw.h \
-    mainform.h
+    mainform.h \
+    open.h
 
 FORMS += \
     mainform.ui
