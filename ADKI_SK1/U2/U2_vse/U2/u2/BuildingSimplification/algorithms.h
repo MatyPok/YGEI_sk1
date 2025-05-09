@@ -5,6 +5,11 @@
 #include "Eigen/Dense"
 #include "Eigen/Core"
 
+#include <QPolygonF>
+#include <QPainterPath>
+#include <QRectF>
+#include <QDebug>
+
 class Algorithms
 {
 public:
@@ -23,6 +28,8 @@ public:
     static double getDistance(const QPointF &p1, const QPointF &p2);
     static QPolygonF createWE(const QPolygonF &pol);
     static QPolygonF createWA(const QPolygonF &pol);
+
+    static double computeIoU(const QPolygonF &pol0, const QPolygonF &pol_gen);
 
     // u1
 

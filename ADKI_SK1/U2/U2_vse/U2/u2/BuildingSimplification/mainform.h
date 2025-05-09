@@ -2,6 +2,10 @@
 #define MAINFORM_H
 
 #include <QMainWindow>
+#include <QLabel>
+#include <QVector>
+#include <QPolygonF>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainForm; }
@@ -32,13 +36,15 @@ private slots:
     void on_actionClear_results_triggered();
     void on_actionClear_All_triggered();
 
-
-
+protected:
+    void resizeEvent(QResizeEvent* event) override;
 
 private:
     Ui::MainForm *ui;
+    QLabel* iouLabel;
+
+        void updateIoU(const QVector<QPolygonF>& originals, const QVector<QPolygonF>& generated);
+    void testIoU();
 };
 
 #endif // MAINFORM_H
-
-

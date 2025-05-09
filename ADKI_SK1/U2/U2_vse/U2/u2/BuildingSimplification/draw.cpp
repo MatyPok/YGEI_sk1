@@ -53,7 +53,7 @@ void Draw::mousePressEvent(QMouseEvent *e)
 
 
 
-
+/*
 void Draw::paintEvent(QPaintEvent *event)
 {
     //Draw
@@ -145,7 +145,86 @@ void Draw::paintEvent(QPaintEvent *event)
 
     //End draw
     painter.end();
+}*/
+
+void Draw::paintEvent(QPaintEvent *event)
+{
+    // Vytvoření objektu pro kreslení
+    QPainter painter(this); // Toto automaticky zahájí kreslení
+
+    // Nastavení grafických atributů pro polygon
+    painter.setPen(Qt::GlobalColor::black);
+    painter.setBrush(Qt::GlobalColor::lightGray);
+
+    // Kreslení všech polygonů
+    for (int i = 0; i < polygons.size(); i++) {
+        painter.drawPolygon(polygons[i]);
+    }
+
+    // Nastavení grafiky pro MAER
+    QPen pen_maer;
+    pen_maer.setColor(Qt::GlobalColor::cyan);   // Nastavení barvy na cyan
+    painter.setPen(pen_maer);  // Použití nastaveného pinu
+    painter.setBrush(Qt::GlobalColor::transparent);
+
+    // Kreslení MAER
+    for (int i = 0; i < maer.size(); i++) {
+        painter.drawPolygon(maer[i]);
+    }
+
+    // Nastavení grafiky pro PCA
+    painter.setPen(Qt::GlobalColor::darkGreen);
+    painter.setBrush(Qt::GlobalColor::transparent);
+    // Kreslení PCA
+    for (int i = 0; i < erpca.size(); i++) {
+        painter.drawPolygon(erpca[i]);
+    }
+
+    // Nastavení grafiky pro LE
+    painter.setPen(Qt::GlobalColor::blue);
+    painter.setBrush(Qt::GlobalColor::transparent);
+    // Kreslení LE
+    for (int i = 0; i < le.size(); i++) {
+        painter.drawPolygon(le[i]);
+    }
+
+    // Nastavení grafiky pro WE (orange)
+    QPen penWE;
+    penWE.setColor(QColor(255, 165, 0));  // Oranžová
+    painter.setPen(penWE);
+    painter.setBrush(Qt::GlobalColor::transparent);
+    // Kreslení WE
+    for (int i = 0; i < we.size(); i++) {
+        painter.drawPolygon(we[i]);
+    }
+
+    // Nastavení grafiky pro WA (yellow)
+    painter.setPen(Qt::GlobalColor::yellow);
+    painter.setBrush(Qt::GlobalColor::transparent);
+    // Kreslení WA
+    for (int i = 0; i < wa.size(); i++) {
+        painter.drawPolygon(wa[i]);
+    }
+
+    // Nastavení grafiky pro CH Jarvis (magenta)
+    painter.setPen(Qt::GlobalColor::magenta);
+    painter.setBrush(Qt::GlobalColor::transparent);
+    // Kreslení CH Jarvis
+    for (int i = 0; i < ch.size(); i++) {
+        painter.drawPolygon(ch[i]);
+    }
+
+    // Nastavení grafiky pro CH Graham (cyan)
+    painter.setPen(Qt::GlobalColor::cyan);
+    painter.setBrush(Qt::GlobalColor::transparent);
+    // Kreslení CH Graham
+    for (int i = 0; i < chGraham.size(); i++) {
+        painter.drawPolygon(chGraham[i]);
+    }
+
+    // Není potřeba volat `painter.end()` – destruktor `QPainter` to provede automaticky.
 }
+
 
 
 // U1

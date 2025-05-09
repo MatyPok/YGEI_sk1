@@ -9,12 +9,36 @@
 
 #include <iostream>
 
+#include <QResizeEvent>
+#include <QPainterPath>
+#include <QPolygonF>
+
 
 MainForm::MainForm(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainForm)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);  // Load the UI
+
+    // Create QLabel
+    iouLabel = new QLabel(this);
+    iouLabel->setAlignment(Qt::AlignRight);  // Align to the right
+    QString text = "<b>Intersection over union</b>";
+    QFont font = iouLabel->font();
+    QFontMetrics fm(font);
+
+    // Get the width of the text with added padding
+    int width = fm.horizontalAdvance(text) + 10;  // Add padding for better appearance
+
+    // Set the minimum width of the label according to the text width
+    iouLabel->setMinimumWidth(width);
+    iouLabel->setText(text);  // Set the text
+    iouLabel->adjustSize();   // Adjust size according to the text
+    iouLabel->setStyleSheet("background-color: white; color: black; border: 1px solid black;");
+    iouLabel->setTextFormat(Qt::RichText);  // Enable HTML formatting
+
+    // Show the window
+    this->show();
 }
 
 MainForm::~MainForm()
@@ -22,17 +46,61 @@ MainForm::~MainForm()
     delete ui;
 }
 
+void MainForm::resizeEvent(QResizeEvent* event)
+{
+    QMainWindow::resizeEvent(event);
+
+    // Keep the label in the bottom right corner when the window is resized
+    if (iouLabel) {
+        int labelWidth = iouLabel->width();  // Get the current width of the label
+        iouLabel->move(width() - labelWidth - 10, height() - iouLabel->height() - 10);
+    }
+}
+
+void MainForm::updateIoU(const QVector<QPolygonF>& originals, const QVector<QPolygonF>& generated)
+{
+    if (originals.size() != generated.size() || originals.isEmpty()) {
+        qDebug() << "IoU: size mismatch or empty input";
+        if (iouLabel) {    iouLabel->setText("<html><b>Accuracy Evaluation</b><br>IoU: -</html>");}
+        return;
+    }
+
+    double totalIoU = 0.0;
+    int validPairs = 0;
+
+    for (int i = 0; i < originals.size(); ++i) {
+        double iou = Algorithms::computeIoU(originals[i], generated[i]);
+
+        if (iou > 0.0) {
+            totalIoU += iou;
+            ++validPairs;
+        }
+    }
+
+    if (validPairs > 0 && iouLabel) {
+        double averageIoU = totalIoU / validPairs;
+        qDebug() << "Average IoU: " << averageIoU;
+        iouLabel->setText(QString("IoU: %1").arg(averageIoU, 0, 'f', 2));
+    } else if (iouLabel) {
+        qDebug() << "No valid pairs -> IoU: -";
+        iouLabel->setText("IoU: -");
+    }
+}
+
+
+
+
 
 void MainForm::on_actionOpen_triggered()
 {
     // U1
-    //input polygons from txt
+    // Input polygons from txt
     ui->Canvas->drawPolygonsFromTXT();
 }
 
 void MainForm::on_actionOpen_SHP_triggered()
 {
-    //load shp with gdal
+    // Load SHP with GDAL
     ui->Canvas->drawPolygonsFromSHP();
 }
 
@@ -46,172 +114,148 @@ void MainForm::on_actionExit_triggered()
 
 void MainForm::on_actionMBR_triggered()
 {
-    //create minimum bounding rectangle
-    QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
+    QVector<QPolygonF> originals = ui->Canvas->getPolygons();
     QVector<QPolygonF> maer;
 
-    // run function
-    for (int i = 0; i < polygons.size(); ++i) {
-
-        if (maer.isEmpty()) {
-            maer.append(QPolygonF());
-        }
-        maer.append(Algorithms::createMAER(polygons[i]));
-
+    for (const QPolygonF& poly : originals) {
+        maer.append(Algorithms::createMAER(poly));
     }
-    //set results
+
     ui->Canvas->setMAER(maer);
-    //repaint
+
+    updateIoU(originals, maer);
     repaint();
 }
+
+
 
 
 void MainForm::on_actionPCA_triggered()
 {
-    //create minimum bounding rectangle
-
-    //get data
+    // Get data
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
     QVector<QPolygonF> erpca;
 
-
-    // run function
+    // Perform the algorithm
     for (int i = 0; i < polygons.size(); ++i) {
-
-        if (erpca.isEmpty()) {
-            erpca.append(QPolygonF());
-        }
-        erpca.append(Algorithms::createERPCA(polygons[i]));
-
+        erpca.append(Algorithms::createERPCA(polygons[i]));  // Add actual results
     }
-    //set results
+
+    // Set results
     ui->Canvas->setERPCA(erpca);
 
-    //repaint
+    // Update IoU
+    updateIoU(polygons, erpca);
+
+    // Repaint
     repaint();
 }
-
-
 
 void MainForm::on_actionLE_triggered()
 {
-    //get data
+    // Get data
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
     QVector<QPolygonF> le;
 
-
-    //run function
+    // Perform the algorithm
     for (int i = 0; i < polygons.size(); ++i) {
-
-        if (le.isEmpty()) {
-            le.append(QPolygonF());
-        }
-        le.append(Algorithms::createLongesEdge(polygons[i]));
-
+        le.append(Algorithms::createLongesEdge(polygons[i]));  // Add actual results
     }
+
+    // Set results
     ui->Canvas->setLE(le);
 
-    //repaint
+    // Update IoU
+    updateIoU(polygons, le);
+
+    // Repaint
     repaint();
-
 }
-
-
 
 void MainForm::on_actionWE_triggered()
 {
-    //get data
+    // Get data
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
     QVector<QPolygonF> we;
 
-    // run function
+    // Perform the algorithm
     for (int i = 0; i < polygons.size(); ++i) {
-
-        if (we.isEmpty()) {
-            we.append(QPolygonF());
-        }
-        we.append(Algorithms::createWE(polygons[i]));
-
+        we.append(Algorithms::createWE(polygons[i]));  // Add actual results
     }
 
-    //set results
-    //ui->Canvas->setCH(ch);
+    // Set results
     ui->Canvas->setWE(we);
 
-    //repaint
+    // Update IoU
+    updateIoU(polygons, we);
+
+    // Repaint
     repaint();
 }
 
 void MainForm::on_actionWA_triggered()
 {
-
-    //get data
+    // Get data
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
     QVector<QPolygonF> wa;
 
-    // run function
+    // Perform the algorithm
     for (int i = 0; i < polygons.size(); ++i) {
-
-        if (wa.isEmpty()) {
-            wa.append(QPolygonF());
-        }
-        wa.append(Algorithms::createWA(polygons[i]));
-
+        wa.append(Algorithms::createWA(polygons[i]));  // Add actual results
     }
 
-    //set results
-    //ui->Canvas->setCH(ch);
+    // Set results
     ui->Canvas->setWA(wa);
 
-    //repaint
+    // Update IoU
+    updateIoU(polygons, wa);
+
+    // Repaint
     repaint();
 }
 
 
+
 void MainForm::on_actionJarvis_Scan_triggered()
 {
-    //get data
+    // Get data
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
     QVector<QPolygonF> ch;
 
-
-    // run function
+    // Run the function
     for (int i = 0; i < polygons.size(); ++i) {
 
         if (ch.isEmpty()) {
             ch.append(QPolygonF());
         }
         ch.append(Algorithms::createCH(polygons[i]));
-
     }
-    //set results
+    // Set results
     ui->Canvas->setCH(ch);
 
-    //repaint
+    // Repaint
     repaint();
 }
 
 
 void MainForm::on_actionGraham_Scan_triggered()
 {
-    //get data
+    // Get data
     QVector<QPolygonF> polygons = ui->Canvas->getPolygons();
     QVector<QPolygonF> chGraham;
 
-
-    // run function
+    // Run the function
     for (int i = 0; i < polygons.size(); ++i) {
 
         if (chGraham.isEmpty()) {
             chGraham.append(QPolygonF());
         }
         chGraham.append(Algorithms::createCH_Graham(polygons[i]));
-
     }
-    //set results
+    // Set results
     ui->Canvas->setCH(chGraham);
 
-    //repaint
+    // Repaint
     repaint();
 }
 
@@ -230,9 +274,3 @@ void MainForm::on_actionClear_All_triggered()
     ui->Canvas->clear();
     repaint();
 }
-
-
-
-
-
-

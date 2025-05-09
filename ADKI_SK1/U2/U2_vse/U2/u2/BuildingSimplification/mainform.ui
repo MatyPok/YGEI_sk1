@@ -16,7 +16,24 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="Draw" name="Canvas" native="true"/>
+     <widget class="Draw" name="Canvas" native="true">
+      <widget class="QLabel" name="iouLabel">
+       <property name="geometry">
+        <rect>
+         <x>1020</x>
+         <y>610</y>
+         <width>231</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -26,7 +43,7 @@
      <x>0</x>
      <y>0</y>
      <width>1279</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

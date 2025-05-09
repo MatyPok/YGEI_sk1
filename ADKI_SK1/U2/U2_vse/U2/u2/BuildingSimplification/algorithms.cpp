@@ -623,19 +623,47 @@ QPolygonF Algorithms::createWA(const QPolygonF &pol) {
     return rotate(mmbox_res, sigma);
 }
 
+double polygonArea(const QPolygonF& polygon) {
+    double area = 0.0;
+    int n = polygon.size();
+    for (int i = 0; i < n; ++i) {
+        QPointF p1 = polygon[i];
+        QPointF p2 = polygon[(i + 1) % n];
+        area += (p1.x() * p2.y()) - (p2.x() * p1.y());
+    }
+    return std::abs(area) * 0.5;
+}
 
 
+double Algorithms::computeIoU(const QPolygonF &pol0, const QPolygonF &pol_gen) {
 
+    // Create a QPainterPath for the first polygon (pol0)
+    QPainterPath path1;
+    path1.addPolygon(pol0);
 
+    // Create a QPainterPath for the generated polygon (pol_gen)
+    QPainterPath path2;
+    path2.addPolygon(pol_gen);
 
+    // Calculate the intersection of the two polygons
+    QPainterPath intersection = path1.intersected(path2);
 
+    // Calculate the union of the two polygons
+    QPainterPath unionPath = path1.united(path2);
 
+    // Compute the area of the intersection polygon
+    double intersectionArea = polygonArea(intersection.toFillPolygon());
 
+    // Compute the area of the union polygon
+    double unionArea = polygonArea(unionPath.toFillPolygon());
 
+    // If the union area is zero (i.e., the polygons are identical and have no area), return 0.0
+    if (unionArea == 0.0)
+        return 0.0;
 
-
-
-
+    // Return the Intersection over Union (IoU) by dividing the intersection area by the union area
+    return intersectionArea / unionArea;
+}
 
 
 
