@@ -3,6 +3,42 @@
 
 Algorithms::Algorithms() {}
 
+
+
+void Algorithms::normalizePoints(std::vector<QPoint3DF>& points, int width, int height)
+{
+    if (points.empty())
+        return;
+
+    QPointF centroid = calculateCentroid(points);
+
+    qreal offsetX = width / 2.0 - centroid.x();
+    qreal offsetY = height / 2.0 - centroid.y();
+
+    for (QPoint3DF& point : points) {
+        point.setX(point.x() + offsetX);
+        point.setY(height - (point.y() + offsetY));
+    }
+}
+
+QPointF Algorithms::calculateCentroid(const std::vector<QPoint3DF>& points)
+{
+    if (points.empty())
+        return QPointF(0, 0);
+
+    qreal totalX = 0;
+    qreal totalY = 0;
+
+    for (const QPoint3DF& point : points) {
+        totalX += point.x();
+        totalY += point.y();
+    }
+
+    return QPointF(totalX / points.size(), totalY / points.size());
+}
+
+
+
 short Algorithms::getPointAndLinePosition(const QPoint3DF &p,const QPoint3DF &p1,const QPoint3DF &p2){
     //Analyze Point and Line position
     double epsilon = 1e-6;
@@ -329,9 +365,10 @@ void Algorithms::analyzeSlope(const std::vector<Edge> &dt,  std::vector<Triangle
     //Analyze DTM slope
     if (triangles.size() == 0)
         edgesToTriangles(dt, triangles);
-
     //Browse DTM by triangles
-    for (auto t: triangles)
+
+    /*
+    for (Triangle t: triangles)
     {
         //Compute slope
         double slope = computeSlope(t.getP1(), t.getP2(), t.getP3());
@@ -339,6 +376,19 @@ void Algorithms::analyzeSlope(const std::vector<Edge> &dt,  std::vector<Triangle
         //Create new triangle
         t.setSlope(slope);
     }
+    */
+
+    for (int i = 0; i<triangles.size(); i++)
+    {
+        QPoint3DF p1 = triangles[i].getP1();
+        QPoint3DF p2 = triangles[i].getP2();
+        QPoint3DF p3 = triangles[i].getP3();
+
+        double slope = computeSlope(p1, p2, p3);
+
+        triangles[i].setSlope(slope);
+    }
+
 }
 
 
@@ -367,15 +417,27 @@ void  Algorithms::analyzeAspect(const std::vector<Edge> &dt,  std::vector<Triang
     //Analyze DTM slope
     if (triangles.size() == 0)
         edgesToTriangles(dt, triangles);
-
+    /*
     //Browse DTM by triangles
-    for (auto t: triangles)
+    for (Triangle &t: triangles)
     {
         //Compute slope
         double aspect = computeAspect(t.getP1(), t.getP2(), t.getP3());
 
         //Create new triangle
         t.setSlope(aspect);
+    }
+    */
+
+    for (int i = 0; i<triangles.size(); i++)
+    {
+        QPoint3DF p1 = triangles[i].getP1();
+        QPoint3DF p2 = triangles[i].getP2();
+        QPoint3DF p3 = triangles[i].getP3();
+
+        double aspect = computeAspect(p1, p2, p3);
+
+        triangles[i].setAspect(aspect);
     }
 }
 

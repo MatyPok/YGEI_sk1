@@ -14,6 +14,7 @@ SOURCES += \
     edge.cpp \
     main.cpp \
     mainform.cpp \
+    open.cpp \
     qpoint3df.cpp \
     settings2.cpp \
     sortpointsbyx.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     draw.h \
     edge.h \
     mainform.h \
+    open.h \
     qpoint3df.h \
     settings2.h \
     sortpointsbyx.h \

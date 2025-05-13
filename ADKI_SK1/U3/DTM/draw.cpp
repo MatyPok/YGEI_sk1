@@ -2,6 +2,18 @@
 #include <QtGui>
 #include <time.h>
 
+#include "draw.h"
+#include <QtGui>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QString>
+#include <QStringList>
+
+#include "algorithms.h"
+
+#include "open.h"
+
 Draw::Draw(QWidget *parent)
     : QWidget{parent}
 {
@@ -59,9 +71,9 @@ void Draw::paintEvent(QPaintEvent *event)
     //Draw slope
     if (view_slope)
     {
-        for (auto t: triangles)
+        for (Triangle t: triangles)
         {
-            /*
+
             //Get vertices
             QPoint3DF p1  = t.getP1();
             QPoint3DF p2  = t.getP2();
@@ -80,7 +92,7 @@ void Draw::paintEvent(QPaintEvent *event)
 
             //Draw triangle
             painter.drawPolygon(vert);
-            */
+
         }
     }
 
@@ -120,9 +132,75 @@ void Draw::paintEvent(QPaintEvent *event)
         }
     }
 
+
+    //Draw aspect
+    if (view_aspect)
+    {
+        for (Triangle t: triangles)
+        {
+
+            //Get vertices
+            QPoint3DF p1  = t.getP1();
+            QPoint3DF p2  = t.getP2();
+            QPoint3DF p3  = t.getP3();
+
+            QPolygonF vert = {p1, p2, p3};
+
+            //Get slope
+            double aspect = t.getAspect();
+
+            //Convert slope to color
+            int color = 255 - 255/M_PI * aspect;
+
+            //Set brush
+            painter.setBrush(QColor(color, color, color));
+
+            //Draw triangle
+            painter.drawPolygon(vert);
+
+        }
+    }
+
+
     //End draw
     painter.end();
 
+}
+
+
+void Draw::pointsFromTXT()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Text Files (*.txt);;All Files (*)"));
+    if (fileName.isEmpty()) return;
+
+    std::vector<QPoint3DF> points0 = Open::openFile(fileName, width(), height());
+
+    for (QPoint3DF p: points0){
+       points.push_back(p);
+    }
+
+    repaint();
+}
+
+void Draw::clear()
+{
+
+    dt.clear();
+    points.clear();
+    contour_lines.clear();
+    triangles.clear();
+
+    repaint();
+
+}
+
+void Draw::clearResults()
+{
+    dt.clear();
+    contour_lines.clear();
+    triangles.clear();
+
+    repaint();
 }
 
 

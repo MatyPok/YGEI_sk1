@@ -35,6 +35,7 @@ public:
     QPoint3DF getP1() const {return p1;}
     QPoint3DF getP2() const {return p2;}
     QPoint3DF getP3() const {return p3;}
+
     double getSlope() const {return slope;}
     double getAspect() const {return aspect;}
     void setSlope(double slope_){slope = slope_;}

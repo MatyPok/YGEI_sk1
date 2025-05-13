@@ -83,7 +83,7 @@ void MainForm::on_actionParameters_triggered()
 void MainForm::on_actionAnalyze_slope_triggered()
 {
     //Analyze slope
-    std::vector<Triangle> triangles;
+    std::vector<Triangle> triangles = ui -> Canvas -> getTriangles();
 
     //Get Delauanay triangulation
     std::vector<Edge> dt = ui -> Canvas -> getDT();
@@ -91,6 +91,25 @@ void MainForm::on_actionAnalyze_slope_triggered()
     //Compute slope
     Algorithms a;
     a.analyzeSlope(dt, triangles);
+
+    //Set results
+    ui->Canvas->setTR(triangles);
+
+    //Repaint
+    repaint();
+}
+
+void MainForm::on_actionAnalyze_exposition_triggered()
+{
+    //Analyze aspect
+    std::vector<Triangle> triangles = ui -> Canvas -> getTriangles();
+
+    //Get Delauanay triangulation
+    std::vector<Edge> dt = ui -> Canvas -> getDT();
+
+    //Compute slope
+    Algorithms a;
+    a.analyzeAspect(dt, triangles);
 
     //Set results
     ui->Canvas->setTR(triangles);
@@ -148,4 +167,32 @@ void MainForm::on_actionExposition_changed()
 
     ui->Canvas->repaint();
 }
+
+
+void MainForm::on_actionExit_triggered()
+{
+    QApplication::quit();
+}
+
+
+void MainForm::on_actionOpen_triggered()
+{
+    //input polygons from txt
+    ui->Canvas->pointsFromTXT();
+}
+
+void MainForm::on_actionClear_Results_triggered()
+{
+    ui->Canvas->clearResults();
+    repaint();
+}
+
+
+void MainForm::on_actionClear_All_triggered()
+{
+    ui->Canvas->clear();
+    repaint();
+}
+
+
 

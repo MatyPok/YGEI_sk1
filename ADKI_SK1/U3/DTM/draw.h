@@ -25,8 +25,11 @@ public:
     void mousePressEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *event);
 
+    void pointsFromTXT();
+
     std::vector<QPoint3DF> getPoints()const {return points;}
     std::vector<Edge> getDT()const {return dt;}
+    std::vector<Triangle> getTriangles() const {return triangles;}
     void setDT(const std::vector<Edge> &dt_){dt = dt_;}
     void setCL(const std::vector<Edge> &contour_lines_){contour_lines = contour_lines_;}
     void setTR(const std::vector<Triangle> &triangles_){triangles = triangles_;}
@@ -37,6 +40,8 @@ public:
     void setViewSlope(const bool &view_slope_){view_slope=view_slope_;}
     void setViewAspect(const bool &view_aspect_){view_aspect=view_aspect_;}
 
+    void clear();
+    void clearResults();
 
 
 signals:
