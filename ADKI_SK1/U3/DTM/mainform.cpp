@@ -95,6 +95,14 @@ void MainForm::on_actionAnalyze_slope_triggered()
     //Set results
     ui->Canvas->setTR(triangles);
 
+    // Turn ON slope, turn OFF aspect
+    view_slope = true;
+    view_aspect = false;
+    ui->actionSlope->setChecked(true);
+    ui->actionExposition->setChecked(false);
+    ui->Canvas->setViewSlope(true);
+    ui->Canvas->setViewAspect(false);
+
     //Repaint
     repaint();
 }
@@ -113,6 +121,14 @@ void MainForm::on_actionAnalyze_exposition_triggered()
 
     //Set results
     ui->Canvas->setTR(triangles);
+
+    // Turn ON aspect, turn OFF slope
+    view_aspect = true;
+    view_slope = false;
+    ui->actionExposition->setChecked(true);
+    ui->actionSlope->setChecked(false);
+    ui->Canvas->setViewAspect(true);
+    ui->Canvas->setViewSlope(false);
 
     //Repaint
     repaint();
@@ -148,7 +164,7 @@ void MainForm::on_actionContour_Lines_changed()
     ui->Canvas->repaint();
 }
 
-
+/*
 void MainForm::on_actionSlope_changed()
 {
     view_slope = ui -> actionSlope -> isChecked();
@@ -157,14 +173,46 @@ void MainForm::on_actionSlope_changed()
 
     ui->Canvas->repaint();
 }
+*/
 
+void MainForm::on_actionSlope_changed()
+{
+    view_slope = ui->actionSlope->isChecked();
 
+    if (view_slope) {
+        // Disable aspect if slope is turned on
+        view_aspect = false;
+        ui->actionExposition->setChecked(false);
+        ui->Canvas->setViewAspect(false);
+    }
+
+    ui->Canvas->setViewSlope(view_slope);
+    ui->Canvas->repaint();
+}
+
+/*
 void MainForm::on_actionExposition_changed()
 {
     view_aspect = ui -> actionExposition -> isChecked();
 
     ui -> Canvas ->setViewAspect(view_aspect);
 
+    ui->Canvas->repaint();
+}
+*/
+
+void MainForm::on_actionExposition_changed()
+{
+    view_aspect = ui->actionExposition->isChecked();
+
+    if (view_aspect) {
+        // Disable slope if aspect is turned on
+        view_slope = false;
+        ui->actionSlope->setChecked(false);
+        ui->Canvas->setViewSlope(false);
+    }
+
+    ui->Canvas->setViewAspect(view_aspect);
     ui->Canvas->repaint();
 }
 

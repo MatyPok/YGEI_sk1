@@ -68,33 +68,6 @@ void Draw::paintEvent(QPaintEvent *event)
     //Create object for drawing
     painter.begin(this);
 
-    //Draw slope
-    if (view_slope)
-    {
-        for (Triangle t: triangles)
-        {
-
-            //Get vertices
-            QPoint3DF p1  = t.getP1();
-            QPoint3DF p2  = t.getP2();
-            QPoint3DF p3  = t.getP3();
-
-            QPolygonF vert = {p1, p2, p3};
-
-            //Get slope
-            double slope = t.getSlope();
-
-            //Convert slope to color
-            int color = 255 - 255/M_PI * slope;
-
-            //Set brush
-            painter.setBrush(QColor(color, color, color));
-
-            //Draw triangle
-            painter.drawPolygon(vert);
-
-        }
-    }
 
     //Set graphic attributes, point
     if(view_points)
@@ -138,6 +111,52 @@ void Draw::paintEvent(QPaintEvent *event)
     {
         for (Triangle t: triangles)
         {
+            // Get vertices
+            QPoint3DF p1  = t.getP1();
+            QPoint3DF p2  = t.getP2();
+            QPoint3DF p3  = t.getP3();
+
+            QPolygonF vert = {p1, p2, p3};
+
+            // Get aspect (orientation)
+            double aspect = t.getAspect();
+
+            // Convert aspect to degrees (0-360°)
+            double aspect_deg = aspect * 180.0 / M_PI;
+            if (aspect_deg < 0) aspect_deg += 360.0;
+
+            // Define fixed colors for specific orientations
+            QColor color;
+            if (aspect_deg >= 0 && aspect_deg < 45) {
+                color = QColor(255, 0, 0); // Red (North)
+            } else if (aspect_deg >= 45 && aspect_deg < 90) {
+                color = QColor(255, 165, 0); // Orange (Northeast)
+            } else if (aspect_deg >= 90 && aspect_deg < 135) {
+                color = QColor(255, 255, 0); // Yellow (East)
+            } else if (aspect_deg >= 135 && aspect_deg < 180) {
+                color = QColor(0, 255, 0); // Green (Southeast)
+            } else if (aspect_deg >= 180 && aspect_deg < 225) {
+                color = QColor(0, 0, 255); // Blue (South)
+            } else if (aspect_deg >= 225 && aspect_deg < 270) {
+                color = QColor(128, 0, 128); // Purple (Southwest)
+            } else if (aspect_deg >= 270 && aspect_deg < 315) {
+                color = QColor(255, 192, 203); // Pink (West)
+            } else {
+                color = QColor(139, 69, 19); // Brown (Northwest)
+            }
+
+            // Set the brush to the fixed color
+            painter.setBrush(color);
+            painter.setPen(Qt::NoPen); // No outline
+            painter.drawPolygon(vert);
+        }
+    }
+
+    //Draw slope
+    if (view_slope)
+    {
+        for (Triangle t: triangles)
+        {
 
             //Get vertices
             QPoint3DF p1  = t.getP1();
@@ -147,14 +166,13 @@ void Draw::paintEvent(QPaintEvent *event)
             QPolygonF vert = {p1, p2, p3};
 
             //Get slope
-            double aspect = t.getAspect();
+            double slope = t.getSlope();
 
             //Convert slope to color
-            int color = 255 - 255/M_PI * aspect;
-
-            //Set brush
+            int color = 255 - 255/M_PI * slope;
+            //Set brush and pen
             painter.setBrush(QColor(color, color, color));
-
+            painter.setPen(Qt::black);
             //Draw triangle
             painter.drawPolygon(vert);
 
